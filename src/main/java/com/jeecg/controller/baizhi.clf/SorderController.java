@@ -12,6 +12,8 @@ import com.jeecg.service.baizhi.clf.SorderItemServiceI;
 import com.jeecg.service.baizhi.clf.SproductServiceI;
 import com.jeecg.service.baizhi.clf.SuserServiceI;
 import org.apache.log4j.Logger;
+import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -101,11 +103,16 @@ public class SorderController extends BaseController {
 
     @RequestMapping(params = "datagrid")
     public void datagrid(SorderEntity sorder, HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
-        CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
+        /*CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
         //查询条件组装器
         org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sorder, request.getParameterMap());
         this.sorderService.getDataGridReturn(cq, true);
-        List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
+        List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();*/
+
+        TSUser tsUser = ResourceUtil.getSessionUser();
+        //获得当前店铺的所有订单
+        List<SorderEntity> results = sorderService.findByProperty(SorderEntity.class, "adminId", tsUser.getId());
+
 
         List<SorderEntity> results2 = new ArrayList<SorderEntity>();
         //扩展字段集合
@@ -158,7 +165,9 @@ public class SorderController extends BaseController {
         AjaxJson j = new AjaxJson();
         sorder = systemService.getEntity(SorderEntity.class, sorder.getId());
         message = "订单表删除成功";
-        sorderService.delete(sorder);
+        sorder.setAdminId("null");
+        sorderService.saveOrUpdate(sorder);
+        //sorderService.delete(sorder);
         systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 
         j.setMsg(message);

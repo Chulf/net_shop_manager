@@ -1,12 +1,21 @@
 package com.jeecg.controller.baizhi.clf;
+import java.io.Serializable;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeecg.entity.baizhi.clf.SadminCategoryEntity;
+import com.jeecg.entity.baizhi.clf.SadminProductEntity;
+import com.jeecg.entity.baizhi.clf.SproductEntity;
+import com.jeecg.service.baizhi.clf.SadminCategoryServiceI;
+import com.jeecg.service.baizhi.clf.SadminProductServiceI;
+import com.jeecg.service.baizhi.clf.SproductServiceI;
 import org.apache.log4j.Logger;
+import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.p3.core.utils.common.StringUtils;
 import org.jeecgframework.web.system.pojo.base.TSCategoryEntity;
+import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,6 +76,12 @@ public class ScategoryController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
+	@Autowired
+	private SadminCategoryServiceI sadminCategoryServiceI;
+	@Autowired
+	private SproductServiceI sproductServiceI;
+	@Autowired
+	private SadminProductServiceI sadminProductServiceI;
 	
 
 
@@ -108,11 +123,45 @@ public class ScategoryController extends BaseController {
 	public AjaxJson del(ScategoryEntity scategory, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
+
+		TSUser user = ResourceUtil.getSessionUser();
+
+		//通过管理员的id 获得用户的所有商品
+		List<SadminProductEntity> sadminProductEntitys = sadminProductServiceI.findByProperty(SadminProductEntity.class, "adminId", user.getId());
+
+		if(user.getUserName().equals("SuperAdmin")){
+			//如果是超级管理员获得所有仓库商品
+			List<SproductEntity> byProperty = sproductServiceI.findByProperty(SproductEntity.class, "flag", "Y");
+			for (SproductEntity sproductEntity : byProperty) {
+				if(sproductEntity.getCategoryId().equals(scategory.getId())){
+					//代表该类别下有商品
+					message = "请先删除该类别下所有商品";
+					systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
+					j.setMsg(message);
+					return j;
+				}
+			}
+		}
+
+		//判断该类别下还有没有商品存在
+		for (SadminProductEntity sadminProductEntity : sadminProductEntitys) {
+
+			 SproductEntity ent1= sproductServiceI.getEntity(SproductEntity.class, sadminProductEntity.getProductId());
+			if(ent1.getCategoryId().equals(scategory.getId())){
+				//如果进入该条件 证明该类别下还有商品存在
+				message = "请先删除该类别下所有商品";
+				systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
+				j.setMsg(message);
+				return j;
+			}
+
+		}
+
 		scategory = systemService.getEntity(ScategoryEntity.class, scategory.getId());
 		message = "类别表删除成功";
-		scategoryService.delete(scategory);
+		sadminCategoryServiceI.updateBySqlString("update s_admin_category set admin_id='null',category_id='null' where admin_id='" + user.getId() + "' and category_id='" + scategory.getId() + "'");
+		//scategoryService.delete(scategory);
 		systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
-		
 		j.setMsg(message);
 		return j;
 	}
@@ -134,7 +183,18 @@ public class ScategoryController extends BaseController {
 			ScategoryEntity t = scategoryService.get(ScategoryEntity.class, scategory.getId());
 			try {
 				MyBeanUtils.copyBeanNotNull2Bean(scategory, t);
-				scategoryService.saveOrUpdate(t);
+				Serializable id = scategoryService.save(t);
+				//scategoryService.saveOrUpdate(t);
+
+				SadminCategoryEntity sadminCategoryEntity = new SadminCategoryEntity();
+
+				sadminCategoryEntity.setCategoryId(id.toString());
+
+				String adminId = ResourceUtil.getSessionUser().getId();
+				sadminCategoryEntity.setAdminId(adminId);
+
+				sadminCategoryServiceI.save(sadminCategoryEntity);
+
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -249,5 +309,26 @@ public class ScategoryController extends BaseController {
 		net.sf.json.JSONArray jsonArray = net.sf.json.JSONArray.fromObject(dateList);
 		j.setMsg(jsonArray.toString());
 		return j;
+	}
+	@RequestMapping(params = "findCategoryByAdminId")
+	public void findCategoryByAdminId(HttpServletResponse response,DataGrid dataGrid){
+		TSUser tsUser = ResourceUtil.getSessionUser();
+
+		//通过管理员Id获得用户关联的所有类别的Id
+		List<SadminCategoryEntity> sadminCategory = sadminCategoryServiceI.findByProperty(SadminCategoryEntity.class, "adminId", tsUser.getId());
+
+		ArrayList<ScategoryEntity> results = new ArrayList<>();
+
+		for (SadminCategoryEntity sadminCategoryEntity : sadminCategory) {
+
+			ScategoryEntity ent1  = scategoryService.getEntity(ScategoryEntity.class, sadminCategoryEntity.getCategoryId());
+
+			results.add(ent1);
+
+		}
+
+		dataGrid.setResults(results);
+		TagUtil.datagrid(response,dataGrid);
+
 	}
 }

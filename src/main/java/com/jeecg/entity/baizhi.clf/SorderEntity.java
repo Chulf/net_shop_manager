@@ -41,6 +41,8 @@ public class SorderEntity implements java.io.Serializable {
 	private java.lang.String userId;
 	/**下单时间*/
 	private java.util.Date time;
+
+	private java.lang.String adminId;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -143,4 +145,19 @@ public class SorderEntity implements java.io.Serializable {
 	public void setTime(java.util.Date time){
 		this.time = time;
 	}
+
+
+	@Column(name ="ADMIN_ID",nullable=true,length=255)
+	public java.lang.String getAdminId(){
+		return this.adminId;
+	}
+
+	/**
+	 *方法: 设置java.lang.String
+	 *@param: java.lang.String  店长外键
+	 */
+	public void setAdminId(java.lang.String adminId){
+		this.adminId = adminId;
+	}
+
 }

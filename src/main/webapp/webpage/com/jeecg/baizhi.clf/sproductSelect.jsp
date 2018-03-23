@@ -81,6 +81,7 @@
             <t:dgCol title="商品价格" field="price" width="120"></t:dgCol>
             <t:dgCol title="商品主图" field="imgsrc" image="true" imageSize="100,60" width="120"></t:dgCol>
             <t:dgCol title="类别外键" field="categoryId" width="120"></t:dgCol>
+            <t:dgCol title="类别名字" field="categoryName" width="120"></t:dgCol>
             <t:dgCol title="商品内容" field="content" width="120" hidden="true"></t:dgCol>
         </t:datagrid>
     </div>

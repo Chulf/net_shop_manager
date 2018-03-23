@@ -1,15 +1,15 @@
 package com.jeecg.controller.baizhi.clf;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeecg.entity.baizhi.clf.SadminCategoryEntity;
 import com.jeecg.entity.baizhi.clf.SadminProductEntity;
 import com.jeecg.entity.baizhi.clf.ScategoryEntity;
+import com.jeecg.service.baizhi.clf.SadminCategoryServiceI;
 import com.jeecg.service.baizhi.clf.SadminProductServiceI;
 import com.jeecg.service.baizhi.clf.ScategoryServiceI;
 import org.apache.log4j.Logger;
@@ -48,7 +48,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
 
-import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.net.URI;
@@ -81,6 +80,8 @@ public class SproductController extends BaseController {
     private ScategoryServiceI scategoryService;
     @Autowired
     private SadminProductServiceI sadminProductServiceI;
+    @Autowired
+    private SadminCategoryServiceI sadminCategoryServiceI;
 
 
     /**
@@ -129,7 +130,7 @@ public class SproductController extends BaseController {
         if (tsUser.getUserName().equals("SuperAdmin")) {
             //如果是仓库管理员可以删除商品
             sproductService.delete(sproduct);
-        } else if ( sproduct.getFlag() != null && sproduct.getFlag().equals("Y")) {
+        } else if (sproduct.getFlag() != null && sproduct.getFlag().equals("Y")) {
             //只删除关系 由于jeecg没有相关api 先把关系设置为null
             sadminProductServiceI.updateBySqlString(" update s_admin_product set admin_id='null',product_id='null' where admin_id='" + tsUser.getId() + "' and product_id='" + sproduct.getId() + "'");
         } else {
@@ -299,19 +300,29 @@ public class SproductController extends BaseController {
     public void findProductByAdmin(HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
         //判断当前登录的管理员 是普通管理员 还是超级管理员
         TSUser tsUser = ResourceUtil.getSessionUser();
-        List<SproductEntity> results;
+        //商品数据列表
+        List<SproductEntity> results = new ArrayList<SproductEntity>();
+
+        HashMap<String, Map<String, Object>> extMap = new HashMap<>();
 
         if (tsUser.getUserName().equals("SuperAdmin")) {
             //如果是仓库管理员 查询所有仓库商品
-            results = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
+            List<SproductEntity> sproducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
+            for (SproductEntity sproduct : sproducts) {
+
+                HashMap<String, Object> map = new HashMap<>();
+
+                ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, sproduct.getCategoryId());
+
+                //扩展类别字段
+                map.put("categoryName", scategoryEntity.getName());
+
+                extMap.put(sproduct.getId(), map);
+                results.add(sproduct);
+            }
         } else {
-
-
             //获取当前登录的管理员 绑定的所有商品
             List<SadminProductEntity> adminProducts = sadminProductServiceI.findByProperty(SadminProductEntity.class, "adminId", tsUser.getId());
-
-            //封装商品信息集合
-            results = new ArrayList<>();
 
             //通过商品的id获得所有商品的信息
             for (SadminProductEntity adminProduct : adminProducts) {
@@ -321,13 +332,18 @@ public class SproductController extends BaseController {
                 if (product == null) break;
                 //覆盖原有的商品价格
                 product.setPrice(adminProduct.getPrice());
+                HashMap<String, Object> map = new HashMap<>();
+                ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, product.getCategoryId());
+                //扩展类别字段
+                map.put("categoryName", scategoryEntity.getName());
+                extMap.put(product.getId(), map);
 
                 results.add(product);
             }
         }
 
         dataGrid.setResults(results);
-        TagUtil.datagrid(response, dataGrid);
+        TagUtil.datagrid(response, dataGrid, extMap);
     }
 
     /**
@@ -355,15 +371,21 @@ public class SproductController extends BaseController {
 
         ArrayList<SproductEntity> results = new ArrayList<>();
         //把没有添加过的商品添加的results中
+        Map<String, Map<String,Object>> extMap = new HashMap<String,Map<String,Object>>();
         for (SproductEntity storeProduct : storeProducts) {
 
             if (!set.contains(storeProduct.getId())) {
+                HashMap<String, Object> map = new HashMap<>();
+                ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, storeProduct.getCategoryId());
+                //扩展类别字段
+                map.put("categoryName", scategoryEntity.getName());
+                extMap.put(storeProduct.getId(), map);
                 results.add(storeProduct);
             }
         }
 
         dataGrid.setResults(results);
-        TagUtil.datagrid(response, dataGrid);
+        TagUtil.datagrid(response, dataGrid,extMap);
     }
 
     @RequestMapping(params = "addStoreProduct")
@@ -384,6 +406,11 @@ public class SproductController extends BaseController {
 
             sadminProductServiceI.save(productEntity);
 
+            //添加完商品之后默认添加商品的类别关系
+            SadminCategoryEntity category = new SadminCategoryEntity();
+            category.setAdminId(tsUser.getId());
+            category.setCategoryId(product.getCategoryId());
+            sadminCategoryServiceI.save(category);
         }
 
     }

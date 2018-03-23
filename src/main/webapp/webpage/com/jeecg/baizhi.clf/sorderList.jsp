@@ -6,6 +6,7 @@
         <t:datagrid name="sorderList" title="订单表" actionUrl="sorderController.do?datagrid" idField="id" fit="true">
             <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
             <t:dgCol title="编号" field="userId" hidden="true"></t:dgCol>
+            <t:dgCol title="编号" field="adminId" hidden="true"></t:dgCol>
             <t:dgCol title="订单编号" field="orderNum" width="120"></t:dgCol>
             <t:dgCol title="订单状态" field="orderStatus" width="120"></t:dgCol>
             <t:dgCol title="下单时间" field="time" width="120"></t:dgCol>
