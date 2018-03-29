@@ -42,7 +42,7 @@
 <script type="text/javascript">
     var iframe = "";
     function openOrderItem(title, addurl, thisPage, width, height) {
-        var id = $('#sorderList').datagrid('getSelected').id;
+        var id = $('#sorderList').datagrid('getSelected').orderNum;
         addurl = addurl+"&id="+id;
         createwindow2(title, addurl, width, height);
     }

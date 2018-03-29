@@ -1,10 +1,8 @@
 package com.jeecg.controller.baizhi.clf;
 
 import java.util.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.jeecg.entity.baizhi.clf.SorderItemEntity;
 import com.jeecg.entity.baizhi.clf.SproductEntity;
 import com.jeecg.entity.baizhi.clf.SuserEntity;
@@ -14,6 +12,7 @@ import com.jeecg.service.baizhi.clf.SuserServiceI;
 import org.apache.log4j.Logger;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.jeecgframework.web.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +79,9 @@ public class SorderController extends BaseController {
     private SuserServiceI suserServiceI;
     @Autowired
     private SproductServiceI sproductServiceI;
+    @Autowired
+    private UserService userService;
+
 
 
     /**
@@ -119,9 +121,18 @@ public class SorderController extends BaseController {
         HashMap<String, Map<String, Object>> extMap = new HashMap<>();
         for (SorderEntity od : results) {
 
-            //通过订单获取用户信息
-            SuserEntity user = suserServiceI.getEntity(SuserEntity.class, od.getUserId());
 
+            String username;
+            //通过订单获取用户信息
+            if(od.getUserId() != null) {
+                //用户下单数据
+                SuserEntity suserEntity = suserServiceI.getEntity(SuserEntity.class, od.getUserId());
+                username = suserEntity.getUsername();
+            }else{
+                //店主下单信息
+                TSUser tsUser2 = userService.getEntity(TSUser.class, od.getShopId());
+                username = tsUser2.getUserName();
+            }
             //获取该订单的所有订单项
             List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", od.getId());
 
@@ -134,7 +145,7 @@ public class SorderController extends BaseController {
             //每行所扩展的字段
             HashMap<String, Object> map = new HashMap<String, Object>();
 
-            map.put("userMsg", user.getUsername());
+            map.put("userMsg", username);
                 /*//通过订单项获得商品信息
 				SproductEntity sproduct  = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
 				map.put("productMsg",sproduct.getName());
@@ -288,21 +299,29 @@ public class SorderController extends BaseController {
     @RequestMapping(params = "findOrderItem")
     public void  findOrderItem(SorderEntity sorderEntity,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid){
         //通过订单获取订单项数据
-        List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", sorderEntity.getId());
+        List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", sorderEntity.getOrderNum());
 
         //封装商品数据
         ArrayList<SproductEntity> products = new ArrayList<>();
 
+
+        HashMap<String, Map<String, Object>> extMap = new HashMap<>();
         //通过订单项获取该订单的所有商品
         for (SorderItemEntity orderItem : orderItems) {
             SproductEntity product = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
+            //覆盖商品的价格为该订单项的价格
+            product.setPrice(orderItem.getPrice());
             products.add(product);
+            HashMap<String, Object> map = new HashMap<>();
+            //添加扩展字段购买的数量
+            map.put("count",orderItem.getCount());
+            extMap.put(product.getId(),map);
         }
 
         //覆盖原有的数据
         dataGrid.setResults(products);
 
-        TagUtil.datagrid(response,dataGrid);
+        TagUtil.datagrid(response,dataGrid,extMap);
     }
     @RequestMapping(params = "changeStatus")
     @ResponseBody

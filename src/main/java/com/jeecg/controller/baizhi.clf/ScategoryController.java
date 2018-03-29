@@ -54,6 +54,8 @@ import java.net.URI;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import static oracle.net.aso.C11.t;
+
 /**   
  * @Title: Controller
  * @Description: 类别表
@@ -202,7 +204,18 @@ public class ScategoryController extends BaseController {
 			}
 		} else {
 			message = "类别表添加成功";
-			scategoryService.save(scategory);
+			Serializable id = scategoryService.save(scategory);
+
+			//scategoryService.saveOrUpdate(t);
+
+			SadminCategoryEntity sadminCategoryEntity = new SadminCategoryEntity();
+
+			sadminCategoryEntity.setCategoryId(id.toString());
+
+			String adminId = ResourceUtil.getSessionUser().getId();
+			sadminCategoryEntity.setAdminId(adminId);
+			sadminCategoryServiceI.save(sadminCategoryEntity);
+
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
 		j.setMsg(message);

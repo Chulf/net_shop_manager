@@ -25,7 +25,6 @@
 	<t:dgToolBar title="common.unlock.user" icon="icon-edit" url="userController.do?lock&lockvalue=1" funname="unlockObj"></t:dgToolBar>
 	<t:dgToolBar title="excelImport" icon="icon-put" funname="ImportXls"></t:dgToolBar>
 	<t:dgToolBar title="excelOutput" icon="icon-putout" funname="ExportXls"></t:dgToolBar>
-	<t:dgToolBar title="templateDownload" icon="icon-putout" funname="ExportXlsByT"></t:dgToolBar>
 </t:datagrid>
 <script>
     $(function() {
@@ -36,16 +35,6 @@
         $("#tempSearchColums").html('');
 	});
 </script>
-<div id="realNameSearchColums" style="display: none;">
-	<div name="searchColumsRealName">
-		<t:userSelect hasLabel="true" selectedNamesInputId="realName" windowWidth="1000px" windowHeight="600px" title="用户名称"></t:userSelect>
-	</div>
-</div>
-<div id="tempSearchColums" style="display: none;">
-    <div name="searchColums">
-       <t:departSelect hasLabel="true" selectedNamesInputId="orgNames"></t:departSelect>
-    </div>
-</div>
 <script type="text/javascript">
 function deleteDialog(id){
 	var url = "userController.do?deleteDialog&id=" + id
