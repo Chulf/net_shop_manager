@@ -105,15 +105,19 @@ public class SorderController extends BaseController {
 
     @RequestMapping(params = "datagrid")
     public void datagrid(SorderEntity sorder, HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
-        /*CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
+        CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
+
+        TSUser tsUser = ResourceUtil.getSessionUser();
+
+        cq.eq("adminId",tsUser.getId());
+
         //查询条件组装器
         org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sorder, request.getParameterMap());
         this.sorderService.getDataGridReturn(cq, true);
-        List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();*/
-
-        TSUser tsUser = ResourceUtil.getSessionUser();
         //获得当前店铺的所有订单
-        List<SorderEntity> results = sorderService.findByProperty(SorderEntity.class, "adminId", tsUser.getId());
+        List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
+
+        //List<SorderEntity> results = sorderService.findByProperty(SorderEntity.class, "adminId", tsUser.getId());
 
 
         List<SorderEntity> results2 = new ArrayList<SorderEntity>();

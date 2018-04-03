@@ -3,13 +3,13 @@
 <t:base type="jquery,easyui,tools,DatePicker"></t:base>
 <div class="easyui-layout" fit="true">
     <div region="center" style="padding:0px;border:0px">
-        <t:datagrid name="sorderList" title="订单表" actionUrl="sorderController.do?datagrid" idField="id" fit="true">
+        <t:datagrid name="sorderList" title="订单表" actionUrl="sorderController.do?datagrid" idField="id" queryMode="group" fit="true">
             <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
             <t:dgCol title="编号" field="userId" hidden="true"></t:dgCol>
             <t:dgCol title="编号" field="adminId" hidden="true"></t:dgCol>
             <t:dgCol title="订单编号" field="orderNum" width="120"></t:dgCol>
             <t:dgCol title="订单状态" field="orderStatus" width="120"></t:dgCol>
-            <t:dgCol title="下单时间" field="time" width="120"></t:dgCol>
+            <t:dgCol title="创建日期"  field="time" formatter="yyyy-MM-dd" query="true" queryMode="group" editor="datebox" width="120"></t:dgCol>
             <t:dgCol title="订单总价" field="orderSalary" width="120"></t:dgCol>
             <t:dgCol title="用户名字" field="userMsg" width="120"></t:dgCol>
 

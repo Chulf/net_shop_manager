@@ -316,7 +316,16 @@ public class SproductController extends BaseController {
 
                 //扩展类别字段
                 map.put("categoryName", scategoryEntity.getName());
+                if(sproduct.getFlag() != null && sproduct.getFlag().equals("Y")){
 
+                    //代表来源为仓库商品
+                    map.put("source","仓库商品");
+
+                }else{
+                    //代表来源为用户添加
+                    map.put("source","店家自己添加");
+
+                }
                 extMap.put(sproduct.getId(), map);
                 results.add(sproduct);
             }
@@ -336,6 +345,17 @@ public class SproductController extends BaseController {
                 ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, product.getCategoryId());
                 //扩展类别字段
                 map.put("categoryName", scategoryEntity.getName());
+                if(product.getFlag() != null && product.getFlag().equals("Y")){
+
+                    //代表来源为仓库商品
+                    map.put("source","仓库商品");
+
+                }else{
+                    //代表来源为用户添加
+                    map.put("source","店家自己添加");
+
+                }
+
                 extMap.put(product.getId(), map);
 
                 results.add(product);
@@ -352,13 +372,19 @@ public class SproductController extends BaseController {
      * @param dataGrid 查看仓库未被选择商品
      */
     @RequestMapping(params = "findStoreProduct")
-    public void findStoreProduct(String categoryId, HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+    public void findStoreProduct(SproductEntity sproduct,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
 
         TSUser tsUser = ResourceUtil.getSessionUser();
 
+        CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
+        //查询条件组装器
+        org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct, request.getParameterMap());
+        cq.eq("flag","Y");
+        this.sproductService.getDataGridReturn(cq, true);
         //获取所有仓库商品
+        List<SproductEntity> storeProducts = (List<SproductEntity>)dataGrid.getResults();
 
-        List<SproductEntity> storeProducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
+        //List<SproductEntity> storeProducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
 
         //获取用户已选择的商品
         List<SadminProductEntity> productEntityList = sadminProductServiceI.findByProperty(SadminProductEntity.class, "adminId", tsUser.getId());

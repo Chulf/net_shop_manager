@@ -129,7 +129,7 @@
 	<div class="layout-admin">
 		<!-- top -->
 		<header class="layout-header">
-			<span class="header-logo"><img alt="image" width="190" height="68" src="plug-in/login/images/baizhi.png" /></span>
+			<span class="header-logo"><img alt="image" width="190" height="68" src="plug-in/login/images/sp3_3.png" /></span>
 			
 			<div class="titlerow" >
 				<div class="titlecell">
@@ -151,7 +151,7 @@
 	                         <a href="javascript:openwindow('系统信息','tSSmsController.do?getSysInfos')" title="系统信息">系统信息</a>
 					</li>
 					<li >
-	                         <a href="javascript:window.open('http://yun.jeecg.org')" title="进入店铺">进入店铺</a>
+	                         <a href="javascript:window.open('http://lu-food.com/netShoppp/shop002')" title="进入店铺">进入店铺</a>
 					</li>
 					<li><a href="javascript:clearLocalstorage()"><t:mutiLang langKey="common.clear.localstorage"/></a></li>
 				</ul>

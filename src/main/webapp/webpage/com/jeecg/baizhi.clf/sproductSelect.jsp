@@ -22,6 +22,10 @@
     };
     function onClick(event, treeId, treeNode){
         var departname = treeNode.name;
+        if(departname == "所有类别"){
+            location.href="${pageContext.request.contextPath}/net_shop_manager/sproductController.do?sproductSelect";
+            return;
+        }
         var queryParams = $('#sproductList2').datagrid('options').queryParams;
         queryParams.categoryId = treeNode.id;
         $('#sproductList2').datagrid('options').queryParams=queryParams;
@@ -60,6 +64,10 @@
                     var d = $.parseJSON(data);
                     if (d.success) {
                         var dbDate = eval(d.msg);
+                        var obj = {name: "所有类别", icon: "plug-in/ztree/css/img/diy/gysroot.png", id: "4028978162275573016227f2d3bdxx1f"}
+                        console.info(dbDate);
+                        dbDate.push(obj);
+                        console.info(dbDate);
                         $.fn.zTree.init($("#departSelect"), setting, dbDate);
                     }
                 }

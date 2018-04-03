@@ -12,6 +12,7 @@
             <t:dgCol title="商品主图" field="imgsrc" image="true"  imageSize="120,80" width="120"></t:dgCol>
             <t:dgCol title="类别外键" field="categoryId" width="120"></t:dgCol>
             <t:dgCol title="类别名字" field="categoryName" width="120"></t:dgCol>
+            <t:dgCol title="来源" field="source" width="120"></t:dgCol>
             <t:dgCol title="商品内容" field="content" width="120" hidden="true"></t:dgCol>
             <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
             <t:dgDelOpt title="删除" url="sproductController.do?del&id={id}" urlclass="ace_button" urlfont="fa-trash-o"/>
