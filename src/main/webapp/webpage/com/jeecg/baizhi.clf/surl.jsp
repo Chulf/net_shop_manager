@@ -42,6 +42,28 @@
 						<span class="Validform_checktip"></span>
 					</td>
 				</tr>
+				<tr>
+					<td align="right">
+						<label class="Validform_label">
+							中文店名:
+						</label>
+					</td>
+					<td class="value">
+						<input class="inputxt" id="name1" name="name1" datatype="*" value="${surlPage.name1}" />
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<label class="Validform_label">
+							意大利店名:
+						</label>
+					</td>
+					<td class="value">
+						<input class="inputxt" id="name2" name="name2" datatype="*" value="${surlPage.name2}" />
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
 			</table>
 		</t:formvalid>
  </body>

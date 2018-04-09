@@ -7,17 +7,17 @@
             <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
             <t:dgCol title="编号" field="userId" hidden="true"></t:dgCol>
             <t:dgCol title="编号" field="adminId" hidden="true"></t:dgCol>
-            <t:dgCol title="订单编号" field="orderNum" width="120"></t:dgCol>
+            <t:dgCol title="订单编号" field="orderNum" width="120" query="true"></t:dgCol>
             <t:dgCol title="订单状态" field="orderStatus" width="120"></t:dgCol>
             <t:dgCol title="创建日期"  field="time" formatter="yyyy-MM-dd" query="true" queryMode="group" editor="datebox" width="120"></t:dgCol>
             <t:dgCol title="订单总价" field="orderSalary" width="120"></t:dgCol>
             <t:dgCol title="用户名字" field="userMsg" width="120"></t:dgCol>
-
             <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
             <t:dgDelOpt title="删除" url="sorderController.do?del&id={id}" urlclass="ace_button" urlfont="fa-trash-o"/>
             <t:dgFunOpt title="更改状态" funname="changeStatus" urlclass="ace_button"  urlfont="fa-check"></t:dgFunOpt>
             <t:dgToolBar title="查看订单详情" icon="icon-search" url="sorderController.do?openOrderItem"
                          funname="openOrderItem" width="700" height="400"></t:dgToolBar>
+            <t:dgToolBar title="导出采购信息" icon="icon-putout" funname="ExportXls2"></t:dgToolBar>
         </t:datagrid>
     </div>
 </div>
@@ -106,5 +106,13 @@
         //关闭dialog窗口
         iframe.document.$lutn.close();
 
+    }
+    //导出
+    function ExportXls() {
+        JeecgExcelExport("sorderController.do?exportXls","sorderList");
+    }
+    //导出
+    function ExportXls2() {
+        JeecgExcelExport("sorderController.do?exportXls2","sorderList");
     }
 </script>

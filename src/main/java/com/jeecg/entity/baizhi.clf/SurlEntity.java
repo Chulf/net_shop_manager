@@ -37,6 +37,9 @@ public class SurlEntity implements java.io.Serializable {
 	private java.lang.String status;
 	/**店长外键*/
 	private java.lang.String adminId;
+
+	private String name1;
+	private String name2;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -99,11 +102,27 @@ public class SurlEntity implements java.io.Serializable {
 		return this.adminId;
 	}
 
-	/**
-	 *方法: 设置java.lang.String
-	 *@param: java.lang.String  店长外键
-	 */
 	public void setAdminId(java.lang.String adminId){
 		this.adminId = adminId;
 	}
+	@Column(name ="NAME1",nullable=true,length=255)
+	public java.lang.String getName1(){
+		return this.name1;
+	}
+
+
+	public void setName1(java.lang.String name1){
+		this.name1 = name1;
+	}
+
+	@Column(name ="NAME2",nullable=true,length=255)
+	public java.lang.String getName2(){
+		return this.name2;
+	}
+
+
+	public void setName2(java.lang.String name2){
+		this.name2 = name2;
+	}
+
 }

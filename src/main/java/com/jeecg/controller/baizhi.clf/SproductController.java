@@ -432,11 +432,18 @@ public class SproductController extends BaseController {
 
             sadminProductServiceI.save(productEntity);
 
-            //添加完商品之后默认添加商品的类别关系
-            SadminCategoryEntity category = new SadminCategoryEntity();
-            category.setAdminId(tsUser.getId());
-            category.setCategoryId(product.getCategoryId());
-            sadminCategoryServiceI.save(category);
+            //添加完商品之后  判断当前店铺是否有当前商品类别 没有则添加
+            List<Object> listbySql = sadminCategoryServiceI.findListbySql("select * from s_admin_category where category_id='" + product.getCategoryId() + "'and admin_id='" + tsUser.getId() + "'");
+
+            if(listbySql.size()==0){
+                //添加类别到该管理员
+                SadminCategoryEntity category = new SadminCategoryEntity();
+                category.setAdminId(tsUser.getId());
+                category.setCategoryId(product.getCategoryId());
+                sadminCategoryServiceI.save(category);
+            }
+
+
         }
 
     }

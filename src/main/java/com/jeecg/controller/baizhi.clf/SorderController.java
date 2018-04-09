@@ -3,18 +3,26 @@ package com.jeecg.controller.baizhi.clf;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.jeecg.demo.entity.JeecgDemoEntity;
 import com.jeecg.entity.baizhi.clf.SorderItemEntity;
 import com.jeecg.entity.baizhi.clf.SproductEntity;
 import com.jeecg.entity.baizhi.clf.SuserEntity;
 import com.jeecg.service.baizhi.clf.SorderItemServiceI;
 import com.jeecg.service.baizhi.clf.SproductServiceI;
 import com.jeecg.service.baizhi.clf.SuserServiceI;
+import com.jeecg.vo.ExcelOrder;
+import net.sf.cglib.core.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.poi.excel.ExcelExportUtil;
+import org.jeecgframework.poi.excel.entity.ExportParams;
+import org.jeecgframework.poi.excel.entity.vo.NormalExcelConstants;
 import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,10 +37,8 @@ import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
-
 import com.jeecg.entity.baizhi.clf.SorderEntity;
 import com.jeecg.service.baizhi.clf.SorderServiceI;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,7 +89,6 @@ public class SorderController extends BaseController {
     private UserService userService;
 
 
-
     /**
      * 订单表列表 页面跳转
      *
@@ -109,7 +114,7 @@ public class SorderController extends BaseController {
 
         TSUser tsUser = ResourceUtil.getSessionUser();
 
-        cq.eq("adminId",tsUser.getId());
+        cq.eq("adminId", tsUser.getId());
 
         //查询条件组装器
         org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sorder, request.getParameterMap());
@@ -128,11 +133,11 @@ public class SorderController extends BaseController {
 
             String username;
             //通过订单获取用户信息
-            if(od.getUserId() != null) {
+            if (od.getUserId() != null) {
                 //用户下单数据
                 SuserEntity suserEntity = suserServiceI.getEntity(SuserEntity.class, od.getUserId());
                 username = suserEntity.getUsername();
-            }else{
+            } else {
                 //店主下单信息
                 TSUser tsUser2 = userService.getEntity(TSUser.class, od.getShopId());
                 username = tsUser2.getUserName();
@@ -151,7 +156,7 @@ public class SorderController extends BaseController {
 
             map.put("userMsg", username);
                 /*//通过订单项获得商品信息
-				SproductEntity sproduct  = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
+                SproductEntity sproduct  = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
 				map.put("productMsg",sproduct.getName());
 				//该商品价格 跟 店长所设置价格一致
 				map.put("productPrice",orderItem.getPrice());*/
@@ -295,13 +300,14 @@ public class SorderController extends BaseController {
     }
 
     @RequestMapping(params = "openOrderItem")
-    public String openProductDetail(String id,HttpServletRequest request) {
-        request.setAttribute("id",id);
+    public String openProductDetail(String id, HttpServletRequest request) {
+        request.setAttribute("id", id);
 
         return "com/jeecg/baizhi.clf/sorderItems";
     }
+
     @RequestMapping(params = "findOrderItem")
-    public void  findOrderItem(SorderEntity sorderEntity,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid){
+    public void findOrderItem(SorderEntity sorderEntity, HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
         //通过订单获取订单项数据
         List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", sorderEntity.getOrderNum());
 
@@ -318,29 +324,131 @@ public class SorderController extends BaseController {
             products.add(product);
             HashMap<String, Object> map = new HashMap<>();
             //添加扩展字段购买的数量
-            map.put("count",orderItem.getCount());
-            extMap.put(product.getId(),map);
+            map.put("count", orderItem.getCount());
+            extMap.put(product.getId(), map);
         }
 
         //覆盖原有的数据
         dataGrid.setResults(products);
 
-        TagUtil.datagrid(response,dataGrid,extMap);
+        TagUtil.datagrid(response, dataGrid, extMap);
     }
     @RequestMapping(params = "changeStatus")
     @ResponseBody
-    public void changeStatus(SorderEntity sorder,HttpServletRequest request) {
+    public void changeStatus(SorderEntity sorder, HttpServletRequest request) {
         String status = sorder.getOrderStatus();
-        if(status.equals("已处理")){
+        if (status.equals("已处理")) {
 
             //sorder.setOrderStatus("N");
             sorder.setOrderStatus("待处理");
 
-        }else{
+        } else {
             //sorder.setOrderStatus("Y");
             sorder.setOrderStatus("已处理");
         }
         sorderService.saveOrUpdate(sorder);
+    }
+
+    @RequestMapping(params = "exportXls")
+    //导出订单数据
+    public String exportXls(SorderEntity sorder, HttpServletRequest request, HttpServletResponse response
+            , DataGrid dataGrid, ModelMap modelMap) {
+
+        CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
+
+        TSUser tsUser = ResourceUtil.getSessionUser();
+
+        cq.eq("adminId", tsUser.getId());
+        //查询条件组装器
+        org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sorder, request.getParameterMap());
+        this.sorderService.getDataGridReturn(cq, true);
+        //获得当前店铺符合条件订单
+        List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
+
+        //一个订单对应多个商品
+        for (SorderEntity od : results) {
+            //获取该订单的所有订单项
+            List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", od.getOrderNum());
+
+            //封装商品数据
+            ArrayList<SproductEntity> products = new ArrayList<>();
+
+            //通过订单项获取该订单的所有商品
+            for (SorderItemEntity orderItem : orderItems) {
+                SproductEntity product = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
+                //覆盖商品的价格为该订单项的价格
+                product.setPrice(orderItem.getPrice());
+                products.add(product);
+                HashMap<String, Object> map = new HashMap<>();
+                //添加扩展字段购买的数量
+                map.put("count", orderItem.getCount());
+            }
+
+            od.setProducts(products);
+        }
+
+        //ExportParams exportParams = new ExportParams();
+
+        //Workbook workbook = ExcelExportUtil.exportExcel(exportParams, SorderEntity.class, results);
+        modelMap.put(NormalExcelConstants.FILE_NAME,"order");
+        modelMap.put(NormalExcelConstants.CLASS,SorderEntity.class);
+        modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("订单数据", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
+        modelMap.put(NormalExcelConstants.DATA_LIST,results);
+        return NormalExcelConstants.JEECG_EXCEL_VIEW;
+    }
+    @RequestMapping(params = "exportXls2")
+    //导出采购信息
+    public String exportXls2(SorderEntity sorder, HttpServletRequest request, HttpServletResponse response
+            , DataGrid dataGrid, ModelMap modelMap) {
+
+        CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
+
+        TSUser tsUser = ResourceUtil.getSessionUser();
+
+        cq.eq("adminId", tsUser.getId());
+        //查询条件组装器
+        org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sorder, request.getParameterMap());
+        this.sorderService.getDataGridReturn(cq, true);
+        //获得当前店铺符合条件订单
+        List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
+
+        //组装采购数据
+        Map<String, ExcelOrder> stringExcelOrderMap = new HashMap<>();
+
+        //一个订单对应多个商品
+        for (SorderEntity od : results) {
+            //获取该订单的所有订单项
+            List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", od.getOrderNum());
+
+            //通过订单项获取该订单的所有商品
+            for (SorderItemEntity orderItem : orderItems) {
+                SproductEntity product = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
+
+                if(stringExcelOrderMap.containsKey(product.getId())){
+                    ExcelOrder excelOrder1 = stringExcelOrderMap.get(product.getId());
+                    //进行数量叠加
+                    excelOrder1.setCount(excelOrder1.getCount()+orderItem.getCount());
+                    continue;
+                }
+                ExcelOrder excelOrder = new ExcelOrder();
+
+                excelOrder.setCount(orderItem.getCount());
+                excelOrder.setProductName(product.getName());
+                if(product.getFlag()!=null && product.getFlag().equals("Y")){
+                    excelOrder.setFlag("是/Yes");
+
+                }else{
+                    excelOrder.setFlag("否/No");
+                }
+                stringExcelOrderMap.put(product.getId(),excelOrder);
+            }
+        }
+        Collection<ExcelOrder> values = stringExcelOrderMap.values();
+        modelMap.put(NormalExcelConstants.FILE_NAME,"采购信息/L'acquisto di dati");
+        modelMap.put(NormalExcelConstants.CLASS,ExcelOrder.class);
+        modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("采购数据/L'acquisto di dati", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
+        modelMap.put(NormalExcelConstants.DATA_LIST,values);
+        return NormalExcelConstants.JEECG_EXCEL_VIEW;
     }
 
 

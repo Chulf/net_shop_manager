@@ -110,26 +110,7 @@
                 </td>
 			</tr>
 		</c:if>
-		<tr>
-			<td align="right"><label class="Validform_label"> <t:mutiLang langKey="common.department"/>: </label></td>
-			<td class="value">
-                <%--<select class="easyui-combobox" data-options="multiple:true, editable: false" id="orgSelect" datatype="*">--%>
-                <%--<select class="easyui-combotree" data-options="url:'departController.do?getOrgTree', multiple:true, cascadeCheck:false"
-                        id="orgSelect" name="orgSelect" datatype="select1">
-                update-end--Author:zhangguoming  Date:20140826 for：将combobox修改为combotree
-                    <c:forEach items="${departList}" var="depart">
-                        <option value="${depart.id }">${depart.departname}</option>
-                    </c:forEach>
-                </select> --%>
-                <%--  <t:departSelect departId="${tsDepart.id }" departName="${tsDepart.departname }"></t:departSelect>--%>
-                
-                <input id="departname" name="departname" type="text" readonly="readonly" class="inputxt" datatype="*" value="${departname}"/>
-                <input id="orgIds" name="orgIds" type="hidden" value="${orgIds}"/>
-                <a href="#" class="easyui-linkbutton" plain="true" icon="icon-search" id="departSearch" onclick="openDepartmentSelect()">选择</a>
-                <a href="#" class="easyui-linkbutton" plain="true" icon="icon-redo" id="departRedo" onclick="callbackClean()">清空</a>
-                <span class="Validform_checktip"><t:mutiLang langKey="please.muti.department"/></span>
-            </td>
-		</tr>
+
 		<tr>
 			<td align="right"><label class="Validform_label"> <t:mutiLang langKey="common.role"/>: </label></td>
 			<td class="value" nowrap>

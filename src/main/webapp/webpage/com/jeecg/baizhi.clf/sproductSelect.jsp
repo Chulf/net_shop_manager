@@ -23,7 +23,7 @@
     function onClick(event, treeId, treeNode){
         var departname = treeNode.name;
         if(departname == "所有类别"){
-            location.href="${pageContext.request.contextPath}/net_shop_manager/sproductController.do?sproductSelect";
+            location.href="${pageContext.request.contextPath}/sproductController.do?sproductSelect";
             return;
         }
         var queryParams = $('#sproductList2').datagrid('options').queryParams;

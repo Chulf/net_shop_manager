@@ -2,18 +2,15 @@ package com.jeecg.entity.baizhi.clf;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.SequenceGenerator;
+import org.jeecgframework.poi.excel.annotation.Excel;
+import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 
 /**   
  * @Title: Entity
@@ -30,21 +27,31 @@ import javax.persistence.SequenceGenerator;
 @SuppressWarnings("serial")
 public class SorderEntity implements java.io.Serializable {
 	/**主键*/
+	@Excel(name="主键",width = 100)
 	private java.lang.String id;
 	/**订单编号*/
+	@Excel(name="订单编号",width = 100)
 	private java.lang.String orderNum;
 	/**订单状态*/
+	@Excel(name="订单状态",width = 50)
 	private java.lang.String orderStatus;
 	/**订单总价*/
+	@Excel(name="订单总价",width = 50)
 	private java.lang.Double orderSalary;
 	/**用户外键*/
-	private java.lang.String userId;
+	@Excel(name="用户名",dictTable = "s_user",dicCode = "id",dicText="username",width = 50)
+    private java.lang.String userId;
 	/**下单时间*/
+	@Excel(name="下单时间",width = 100)
 	private java.util.Date time;
 
 	private java.lang.String adminId;
 
+	@Excel(name="店主名",dictTable = "t_s_base_user",dicCode = "id",dicText="username",width = 50)
 	private java.lang.String shopId;
+
+	//@ExcelCollection(name="订单详情")
+	private List<SproductEntity> products;
 
 
 
@@ -177,4 +184,12 @@ public class SorderEntity implements java.io.Serializable {
 		this.shopId = shopId;
 	}
 
+	@Transient
+	public List<SproductEntity> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<SproductEntity> products) {
+		this.products = products;
+	}
 }
