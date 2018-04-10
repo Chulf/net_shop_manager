@@ -29,6 +29,7 @@
 </div>
 
 <script type="text/javascript">
+
     var iframe = "";
     function openProductSelect(title,addurl,thisPage,width,height){
 
