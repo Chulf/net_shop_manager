@@ -45,6 +45,8 @@ public class SproductEntity implements java.io.Serializable {
 	private java.lang.String content;
 	/**仓库商品标志*/
 	private java.lang.String flag;
+	/**商品编号*/
+	private String productNum;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -178,6 +180,19 @@ public class SproductEntity implements java.io.Serializable {
 	 */
 	public void setFlag(java.lang.String flag){
 		this.flag = flag;
+	}
+
+	@Column(name ="PRODUCTNUM",nullable=true,length=16777215)
+	public java.lang.String getProductNum(){
+		return this.productNum;
+	}
+
+	/**
+	 *方法: 设置java.lang.Object
+	 *@param: java.lang.Object  商品编号
+	 */
+	public void setProductNum(java.lang.String productNum){
+		this.productNum = productNum;
 	}
 
 }

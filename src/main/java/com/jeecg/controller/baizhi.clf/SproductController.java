@@ -297,7 +297,7 @@ public class SproductController extends BaseController {
      * @param dataGrid 查看管理员店铺商品
      */
     @RequestMapping(params = "findProductByAdmin")
-    public void findProductByAdmin(HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+    public void findProductByAdmin(HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid,SproductEntity sproduct1) {
         //判断当前登录的管理员 是普通管理员 还是超级管理员
         TSUser tsUser = ResourceUtil.getSessionUser();
         //商品数据列表
@@ -307,7 +307,14 @@ public class SproductController extends BaseController {
 
         if (tsUser.getUserName().equals("SuperAdmin")) {
             //如果是仓库管理员 查询所有仓库商品
-            List<SproductEntity> sproducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
+            CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
+            //查询条件组装器
+            cq.eq("flag","Y");
+            org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct1, request.getParameterMap());
+            this.sproductService.getDataGridReturn(cq, true);
+            List<SproductEntity> sproducts =  dataGrid.getResults();
+
+            //List<SproductEntity> sproducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
             for (SproductEntity sproduct : sproducts) {
 
                 HashMap<String, Object> map = new HashMap<>();
@@ -336,10 +343,20 @@ public class SproductController extends BaseController {
             //通过商品的id获得所有商品的信息
             for (SadminProductEntity adminProduct : adminProducts) {
 
-                SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
+
+               // SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
+                CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
+                //查询条件组装器
+                cq.eq("id",adminProduct.getProductId());
+                org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct1, request.getParameterMap());
+                this.sproductService.getDataGridReturn(cq, true);
+                List<SproductEntity> sproducts =  dataGrid.getResults();
+
+
                 systemService.getSession().clear();
-                if (product == null) break;
+                if (sproducts.size() == 0) continue;
                 //覆盖原有的商品价格
+                SproductEntity product = sproducts.get(0);
                 product.setPrice(adminProduct.getPrice());
                 HashMap<String, Object> map = new HashMap<>();
                 ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, product.getCategoryId());

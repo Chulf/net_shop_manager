@@ -47,6 +47,20 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
+
+                            商品编号:
+
+                        </label>
+                    </td>
+                    <td class="value">
+                        <input class="inputxt" id="productNum" name="productNum"
+                               datatype="*2-10" value='${sproductPage.productNum}'/>
+                        <span class="Validform_checktip"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <label class="Validform_label">
                             商品描述:
                         </label>
                     </td>

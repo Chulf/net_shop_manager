@@ -85,6 +85,7 @@
                     fit="true" fitColumns="true" idField="id" queryMode="group"  sortOrder="desc">
             <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
             <t:dgCol title="商品标题" field="name" width="120"></t:dgCol>
+            <t:dgCol title="商品编号" field="productNum" width="120"></t:dgCol>
             <t:dgCol title="商品描述" field="description" width="120"></t:dgCol>
             <t:dgCol title="商品价格" field="price" width="120"></t:dgCol>
             <t:dgCol title="商品主图" field="imgsrc" image="true" imageSize="100,60" width="120"></t:dgCol>
