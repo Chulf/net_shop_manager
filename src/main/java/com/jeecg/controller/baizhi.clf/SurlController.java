@@ -1,10 +1,13 @@
 package com.jeecg.controller.baizhi.clf;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.jeecgframework.web.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
+
+import java.util.Map;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -65,6 +70,8 @@ public class SurlController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
+	@Autowired
+	private UserService userService;
 	
 
 
@@ -93,7 +100,24 @@ public class SurlController extends BaseController {
 		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, surl, request.getParameterMap());
 		this.surlService.getDataGridReturn(cq, true);
-		TagUtil.datagrid(response, dataGrid);
+		//为每个实体添加扩展字段
+		List<SurlEntity> surlEntitys = dataGrid.getResults();
+
+		HashMap<String, Map<String, Object>> extMap = new HashMap<>();
+
+		for (SurlEntity surlEntity : surlEntitys) {
+			HashMap<String, Object> map = new HashMap<>();
+
+			String adminId = surlEntity.getAdminId();
+
+			TSUser admin = userService.getEntity(TSUser.class, adminId);
+
+			map.put("adminName",admin.getUserName());
+
+			extMap.put(surlEntity.getId(),map);
+		}
+
+		TagUtil.datagrid(response, dataGrid,extMap);
 	}
 
 	/**

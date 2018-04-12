@@ -8,6 +8,7 @@
             <t:dgCol title="店铺地址" field="url" width="120"></t:dgCol>
             <t:dgCol title="店铺状态" field="status" width="120"></t:dgCol>
             <t:dgCol title="店长外键" field="adminId" width="120"></t:dgCol>
+            <t:dgCol title="店长名字" field="adminName" width="120"></t:dgCol>
             <t:dgCol title="中文店名" field="name1" width="120"></t:dgCol>
             <t:dgCol title="意大利店名" field="name2" width="120"></t:dgCol>
             <t:dgCol title="操作" field="opt" width="100"></t:dgCol>

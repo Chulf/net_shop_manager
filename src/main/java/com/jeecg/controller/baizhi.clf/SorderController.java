@@ -443,8 +443,11 @@ public class SorderController extends BaseController {
                 stringExcelOrderMap.put(product.getId(),excelOrder);
             }
         }
+
+        String time_begin = request.getParameter("time_begin");
+        if(time_begin == null) time_begin = "all";
         Collection<ExcelOrder> values = stringExcelOrderMap.values();
-        modelMap.put(NormalExcelConstants.FILE_NAME,"采购信息/L'acquisto di dati");
+        modelMap.put(NormalExcelConstants.FILE_NAME,"采购信息/L'acquisto di dati/"+time_begin);
         modelMap.put(NormalExcelConstants.CLASS,ExcelOrder.class);
         modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("采购数据/L'acquisto di dati", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
         modelMap.put(NormalExcelConstants.DATA_LIST,values);
