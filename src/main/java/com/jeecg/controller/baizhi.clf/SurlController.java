@@ -158,7 +158,7 @@ public class SurlController extends BaseController {
 			SurlEntity t = surlService.get(SurlEntity.class, surl.getId());
 			try {
 				// url为基础url+用户创建的url
-				surl.setUrl(baseUrl+surl.getUrl());
+				surl.setUrl(surl.getUrl());
 				MyBeanUtils.copyBeanNotNull2Bean(surl, t);
 				surlService.saveOrUpdate(t);
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);

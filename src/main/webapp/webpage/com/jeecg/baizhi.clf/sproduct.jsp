@@ -16,7 +16,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品价格:
+                            商品价格/Il prezzo:
                         </label>
                     </td>
                     <td class="value">
@@ -25,7 +25,7 @@
                     </td>
                 </tr>
                 <h1><font
-                        color="red">${sessionScope.LOCAL_CLINET_USER.userName}您只能更改仓库商品的价格为您的自定义价格，仓库商品的其它信息不能更改！</font>
+                        color="red">${sessionScope.LOCAL_CLINET_USER.userName}您只能更改仓库商品的价格为您的自定义价格，仓库商品的其它信息不能更改！/Puoi cambiare i prezzi delle Merci di Magazzino per la vostra usanza dei prezzi delle Merci di Magazzino di altre informazioni, non posso cambiare</font>
                 </h1>
             </c:when>
 
@@ -34,7 +34,7 @@
                     <td align="right">
                         <label class="Validform_label">
 
-                            商品标题:
+                            商品标题/Il titolo:
 
                         </label>
                     </td>
@@ -48,7 +48,7 @@
                     <td align="right">
                         <label class="Validform_label">
 
-                            商品编号:
+                            商品编号/num:
 
                         </label>
                     </td>
@@ -61,7 +61,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品描述:
+                            商品描述/Descrizione:
                         </label>
                     </td>
                     <td class="value">
@@ -74,7 +74,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品价格:
+                            商品价格/Il prezzo:
                         </label>
                     </td>
                     <td class="value">
@@ -85,7 +85,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品主图:
+                            商品主图/La principale figura:
                         </label>
                     </td>
                     <td class="value">
@@ -98,7 +98,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            类别外键:
+                            类别/La categoria:
                         </label>
                     </td>
                     <td class="value"><t:dictSelect field="categoryId" datatype="*" type="select" typeGroupCode="sex"
@@ -112,7 +112,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品内容:
+                            商品内容/IL contenuto:
                         </label>
                     </td>
                     <td class="value">

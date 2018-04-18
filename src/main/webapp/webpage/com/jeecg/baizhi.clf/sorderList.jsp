@@ -17,6 +17,7 @@
             <t:dgFunOpt title="更改状态" funname="changeStatus" urlclass="ace_button"  urlfont="fa-check"></t:dgFunOpt>
             <t:dgToolBar title="查看订单详情" icon="icon-search" url="sorderController.do?openOrderItem"
                          funname="openOrderItem" width="700" height="400"></t:dgToolBar>
+            <t:dgToolBar title="导出订单详情" icon="icon-putout" funname="ExportXls" operationCode="exportXls"></t:dgToolBar>
             <t:dgToolBar title="导出采购信息" icon="icon-putout" funname="ExportXls2"></t:dgToolBar>
         </t:datagrid>
     </div>

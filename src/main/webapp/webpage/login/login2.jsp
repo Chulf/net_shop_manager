@@ -75,7 +75,7 @@
     </div>
 
     <div class="copyright ">
-    	<span>&copy; 百知教育 版权所有 <span class="tip"><a href="#" title=SHOP-MANAGER>百知教育</a> (推荐使用IE8+,谷歌浏览器) </span></span>
+    	<span>&copy; MainRiverSoft 版权所有 <span class="tip"><a href="#" title=SHOP-MANAGER>MainRiverSoft</a> (推荐使用IE8+,谷歌浏览器) </span></span>
     </div>       
 </div>
 </form>

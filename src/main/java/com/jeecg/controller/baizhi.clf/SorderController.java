@@ -11,6 +11,8 @@ import com.jeecg.service.baizhi.clf.SorderItemServiceI;
 import com.jeecg.service.baizhi.clf.SproductServiceI;
 import com.jeecg.service.baizhi.clf.SuserServiceI;
 import com.jeecg.vo.ExcelOrder;
+import com.jeecg.vo.ExcelOrderItem;
+import com.jeecg.vo.ProductItem;
 import net.sf.cglib.core.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -311,7 +313,7 @@ public class SorderController extends BaseController {
         //通过订单获取订单项数据
         List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", sorderEntity.getOrderNum());
 
-        //封装商品数据
+        /*//封装商品数据
         ArrayList<SproductEntity> products = new ArrayList<>();
 
 
@@ -327,11 +329,11 @@ public class SorderController extends BaseController {
             map.put("count", orderItem.getCount());
             extMap.put(product.getId(), map);
         }
-
+*/
         //覆盖原有的数据
-        dataGrid.setResults(products);
+        dataGrid.setResults(orderItems);
 
-        TagUtil.datagrid(response, dataGrid, extMap);
+        TagUtil.datagrid(response, dataGrid);
     }
     @RequestMapping(params = "changeStatus")
     @ResponseBody
@@ -357,7 +359,6 @@ public class SorderController extends BaseController {
         CriteriaQuery cq = new CriteriaQuery(SorderEntity.class, dataGrid);
 
         TSUser tsUser = ResourceUtil.getSessionUser();
-
         cq.eq("adminId", tsUser.getId());
         //查询条件组装器
         org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sorder, request.getParameterMap());
@@ -365,35 +366,46 @@ public class SorderController extends BaseController {
         //获得当前店铺符合条件订单
         List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
 
+        //封装要导出的数据
+        ArrayList<ExcelOrderItem> data = new ArrayList<>();
+
         //一个订单对应多个商品
         for (SorderEntity od : results) {
+            //替换导出的信息
+            ExcelOrderItem excelOrderItem = new ExcelOrderItem();
+
+            excelOrderItem.setOrderNum(od.getOrderNum());
+            excelOrderItem.setOrderSalary(od.getOrderSalary());
+            excelOrderItem.setCreateTime(od.getTime());
+            //通过excel注解自动查询
+            excelOrderItem.setPhone(od.getUserId());
+            excelOrderItem.setUsername(od.getUserId());
+
+            //疯传订单详情
+            ArrayList<ProductItem> productItems = new ArrayList<>();
+
             //获取该订单的所有订单项
             List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", od.getOrderNum());
 
-            //封装商品数据
-            ArrayList<SproductEntity> products = new ArrayList<>();
-
-            //通过订单项获取该订单的所有商品
             for (SorderItemEntity orderItem : orderItems) {
-                SproductEntity product = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
-                //覆盖商品的价格为该订单项的价格
-                product.setPrice(orderItem.getPrice());
-                products.add(product);
-                HashMap<String, Object> map = new HashMap<>();
-                //添加扩展字段购买的数量
-                map.put("count", orderItem.getCount());
-            }
+                //封装详情数据
+                ProductItem productItem = new ProductItem();
 
-            od.setProducts(products);
+                productItem.setCount(orderItem.getCount());
+                productItem.setProductName(orderItem.getName());
+                productItem.setProductNum(orderItem.getProductNum());
+                productItems.add(productItem);
+            }
+            excelOrderItem.setProductItemList(productItems);
+            data.add(excelOrderItem);
         }
 
-        //ExportParams exportParams = new ExportParams();
-
-        //Workbook workbook = ExcelExportUtil.exportExcel(exportParams, SorderEntity.class, results);
-        modelMap.put(NormalExcelConstants.FILE_NAME,"order");
-        modelMap.put(NormalExcelConstants.CLASS,SorderEntity.class);
-        modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("订单数据", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
-        modelMap.put(NormalExcelConstants.DATA_LIST,results);
+        String time_begin = request.getParameter("time_begin");
+        if(time_begin == null) time_begin = "all";
+        modelMap.put(NormalExcelConstants.FILE_NAME,"订单详情/L'Ordine di dettagli/"+time_begin);
+        modelMap.put(NormalExcelConstants.CLASS,ExcelOrderItem.class);
+        modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("订单详情/L'Ordine di dettagli", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
+        modelMap.put(NormalExcelConstants.DATA_LIST,data);
         return NormalExcelConstants.JEECG_EXCEL_VIEW;
     }
     @RequestMapping(params = "exportXls2")

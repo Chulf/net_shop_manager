@@ -27,27 +27,20 @@ import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 @SuppressWarnings("serial")
 public class SorderEntity implements java.io.Serializable {
 	/**主键*/
-	@Excel(name="主键",width = 100)
 	private java.lang.String id;
 	/**订单编号*/
-	@Excel(name="订单编号",width = 100)
 	private java.lang.String orderNum;
 	/**订单状态*/
-	@Excel(name="订单状态",width = 50)
 	private java.lang.String orderStatus;
 	/**订单总价*/
-	@Excel(name="订单总价",width = 50)
 	private java.lang.Double orderSalary;
 	/**用户外键*/
-	@Excel(name="用户名",dictTable = "s_user",dicCode = "id",dicText="username",width = 50)
     private java.lang.String userId;
 	/**下单时间*/
-	@Excel(name="下单时间",width = 100)
 	private java.util.Date time;
 
 	private java.lang.String adminId;
 
-	@Excel(name="店主名",dictTable = "t_s_base_user",dicCode = "id",dicText="username",width = 50)
 	private java.lang.String shopId;
 
 	//@ExcelCollection(name="订单详情")

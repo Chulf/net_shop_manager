@@ -130,6 +130,8 @@ public class SproductController extends BaseController {
         if (tsUser.getUserName().equals("SuperAdmin")) {
             //如果是仓库管理员可以删除商品
             sproductService.delete(sproduct);
+            //并且把所有店铺该商品进行下架
+            sadminProductServiceI.updateBySqlString(" update s_admin_product set admin_id='null',product_id='null' where product_id='" + sproduct.getId() + "'");
         } else if (sproduct.getFlag() != null && sproduct.getFlag().equals("Y")) {
             //只删除关系 由于jeecg没有相关api 先把关系设置为null
             sadminProductServiceI.updateBySqlString(" update s_admin_product set admin_id='null',product_id='null' where admin_id='" + tsUser.getId() + "' and product_id='" + sproduct.getId() + "'");

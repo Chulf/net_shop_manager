@@ -16,6 +16,7 @@ import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.p3.core.utils.common.StringUtils;
 import org.jeecgframework.web.system.pojo.base.TSCategoryEntity;
 import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.jeecgframework.web.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,6 +85,9 @@ public class ScategoryController extends BaseController {
 	private SproductServiceI sproductServiceI;
 	@Autowired
 	private SadminProductServiceI sadminProductServiceI;
+	@Autowired
+	private UserService userService;
+
 	
 
 
@@ -300,7 +304,16 @@ public class ScategoryController extends BaseController {
 	public AjaxJson getCategoryInfo(HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
 
-		List<ScategoryEntity> tSDeparts = scategoryService.getList(ScategoryEntity.class);
+		TSUser user = userService.findUniqueByProperty(TSUser.class, "userName", "SuperAdmin");
+
+		List<SadminCategoryEntity> adminCategorys = sadminCategoryServiceI.findByProperty(SadminCategoryEntity.class, "adminId", user.getId());
+
+		List<ScategoryEntity> tSDeparts = new ArrayList<ScategoryEntity>();
+
+		for (SadminCategoryEntity adminCategory : adminCategorys) {
+			ScategoryEntity entity = scategoryService.getEntity(ScategoryEntity.class, adminCategory.getCategoryId());
+			tSDeparts.add(entity);
+		}
 
 		//拼装树形结构既设置节点checked属性
 		List<Map<String,Object>> dateList = null;

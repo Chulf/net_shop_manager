@@ -4,26 +4,26 @@
 
 <div class="easyui-layout" fit="true">
     <div region="center" style="padding:0px;border:0px">
-        <t:datagrid name="sproductList" title="商品表" actionUrl="sproductController.do?findProductByAdmin" idField="id" fit="true">
+        <t:datagrid name="sproductList" title="商品/La Merce" actionUrl="sproductController.do?findProductByAdmin" idField="id" fit="true">
             <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
-            <t:dgCol title="商品标题" field="name" width="120"></t:dgCol>
-            <t:dgCol title="商品描述" field="description" width="120"></t:dgCol>
-            <t:dgCol title="商品编号" field="productNum" width="120" query="true"></t:dgCol>
-            <t:dgCol title="商品价格" field="price" width="120"></t:dgCol>
-            <t:dgCol title="商品主图" field="imgsrc" image="true"  imageSize="120,80" width="120"></t:dgCol>
-            <t:dgCol title="类别外键" field="categoryId" width="120"></t:dgCol>
-            <t:dgCol title="类别名字" field="categoryName" width="120"></t:dgCol>
-            <t:dgCol title="来源" field="source" width="120"></t:dgCol>
-            <t:dgCol title="商品内容" field="content" width="120" hidden="true"></t:dgCol>
-            <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
-            <t:dgDelOpt title="删除" url="sproductController.do?del&id={id}" urlclass="ace_button" urlfont="fa-trash-o"/>
-            <t:dgToolBar title="添加新的商品" icon="icon-add" url="sproductController.do?addorupdate" funname="add" width="770"
+            <t:dgCol title="商品标题/Il titolo" field="name" width="120"></t:dgCol>
+            <t:dgCol title="商品描述/Descrizione" field="description" width="120"></t:dgCol>
+            <t:dgCol title="商品编号/num" field="productNum" width="120" query="true"></t:dgCol>
+            <t:dgCol title="商品价格/Il prezzo" field="price" width="120"></t:dgCol>
+            <t:dgCol title="商品主图/La principale figura" field="imgsrc" image="true"  imageSize="120,80" width="120"></t:dgCol>
+            <t:dgCol title="类别外键/La Politica Estera" field="categoryId" width="120"></t:dgCol>
+            <t:dgCol title="类别名字/La categoria" field="categoryName" width="120"></t:dgCol>
+            <t:dgCol title="来源/Fonti di" field="source" width="120"></t:dgCol>
+            <t:dgCol title="商品内容/IL contenuto" field="content" width="120" hidden="true"></t:dgCol>
+            <t:dgCol title="操作/Operazione" field="opt" width="100"></t:dgCol>
+            <t:dgDelOpt title="删除/Cancellare" url="sproductController.do?del&id={id}" urlclass="ace_button" urlfont="fa-trash-o"/>
+            <t:dgToolBar title="添加新的商品/Aggiungere" icon="icon-add" url="sproductController.do?addorupdate" funname="add" width="770"
                          height="500"></t:dgToolBar>
-            <t:dgToolBar title="添加仓库商品" icon="icon-add" url="sproductController.do?sproductSelect" funname="openProductSelect" width="870"
+            <t:dgToolBar title="添加仓库商品/IL Magazzino Merci" icon="icon-add" url="sproductController.do?sproductSelect" funname="openProductSelect" width="870"
                          height="500" operationCode="openProductSelect"></t:dgToolBar>
-            <t:dgToolBar title="编辑" icon="icon-edit" url="sproductController.do?addorupdate" funname="update"
+            <t:dgToolBar title="编辑/Editore" icon="icon-edit" url="sproductController.do?addorupdate" funname="update"
                          width="770" height="500"></t:dgToolBar>
-            <t:dgToolBar title="查看" icon="icon-search" url="sproductController.do?addorupdate" funname="detail"
+            <t:dgToolBar title="查看/Vista" icon="icon-search" url="sproductController.do?addorupdate" funname="detail"
                          width="770" height="500"></t:dgToolBar>
         </t:datagrid>
     </div>
