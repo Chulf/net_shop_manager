@@ -434,10 +434,10 @@ public class SorderController extends BaseController {
 
             //通过订单项获取该订单的所有商品
             for (SorderItemEntity orderItem : orderItems) {
-                SproductEntity product = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
+               // SproductEntity product = sproductServiceI.getEntity(SproductEntity.class, orderItem.getProductId());
 
-                if(stringExcelOrderMap.containsKey(product.getId())){
-                    ExcelOrder excelOrder1 = stringExcelOrderMap.get(product.getId());
+                if(stringExcelOrderMap.containsKey(orderItem.getProductId())){
+                    ExcelOrder excelOrder1 = stringExcelOrderMap.get(orderItem.getProductId());
                     //进行数量叠加
                     excelOrder1.setCount(excelOrder1.getCount()+orderItem.getCount());
                     continue;
@@ -445,14 +445,17 @@ public class SorderController extends BaseController {
                 ExcelOrder excelOrder = new ExcelOrder();
 
                 excelOrder.setCount(orderItem.getCount());
-                excelOrder.setProductName(product.getName());
-                if(product.getFlag()!=null && product.getFlag().equals("Y")){
+                excelOrder.setProductName(orderItem.getName());
+                excelOrder.setPrice(orderItem.getPrice());
+                excelOrder.setUsername(od.getUserId());
+                excelOrder.setPhone(od.getUserId());
+                /*if(orderItem.getFlag()!=null && product.getFlag().equals("Y")){
                     excelOrder.setFlag("是/Yes");
 
                 }else{
                     excelOrder.setFlag("否/No");
-                }
-                stringExcelOrderMap.put(product.getId(),excelOrder);
+                }*/
+                stringExcelOrderMap.put(orderItem.getProductId(),excelOrder);
             }
         }
 

@@ -40,7 +40,7 @@
                     </td>
                     <td class="value">
                         <input class="inputxt" id="name" name="name"
-                               datatype="*2-10" value='${sproductPage.name}'/>
+                               datatype="*2-50" value='${sproductPage.name}'/>
                         <span class="Validform_checktip"></span>
                     </td>
                 </tr>

@@ -10,12 +10,19 @@ public class ExcelOrder {
 
     private String id;
 
-    @Excel(name="商品名字/productName",width = 100)
+    @Excel(name="商品名字/productName",width = 30)
     private String productName;
-    @Excel(name="购买数量/bugCount",width = 50)
+    @Excel(name="购买数量/bugCount",width = 30)
     private Integer count;
-    @Excel(name="是否仓库商品/isStore?",width = 50)
-    private String flag;
+    @Excel(name="商品单价/prezzo unitario",width = 30)
+    private Double price;
+    //下单人
+    @Excel(name="用户名/IL nome utente",dictTable = "s_user",dicCode = "id",dicText="username",width = 30)
+    private String username;
+    //联系方式
+    @Excel(name="联系方式/IL MoDo di contattare",dictTable = "s_user",dicCode = "id",dicText="phone",width = 30)
+    private String phone;
+
 
     public String getProductName() {
         return productName;
@@ -33,12 +40,12 @@ public class ExcelOrder {
         this.count = count;
     }
 
-    public String getFlag() {
-        return flag;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getId() {
@@ -47,5 +54,21 @@ public class ExcelOrder {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
