@@ -159,6 +159,10 @@ public class SurlController extends BaseController {
 			try {
 				// url为基础url+用户创建的url
 				surl.setUrl(surl.getUrl());
+				if(surl.getRecommend().equals("Y")){
+					//如果修改推荐店铺 则修改其它所有推荐店铺为不推荐
+					surlService.updateBySqlString("update s_url set recommend='N' where recommend='Y'");
+				}
 				MyBeanUtils.copyBeanNotNull2Bean(surl, t);
 				surlService.saveOrUpdate(t);
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
@@ -170,6 +174,10 @@ public class SurlController extends BaseController {
 			message = "店铺表添加成功";
 			// url为基础url+用户创建的url
 			surl.setUrl(baseUrl+surl.getUrl());
+			if(surl.getRecommend().equals("Y")){
+				//如果添加时置为推荐店铺 则修改其它所有推荐店铺为不推荐
+				surlService.updateBySqlString("update s_url set recommend='N' where recommend='Y'");
+			}
 			surlService.save(surl);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}

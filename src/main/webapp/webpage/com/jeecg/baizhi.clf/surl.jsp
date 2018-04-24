@@ -64,6 +64,16 @@
 						<span class="Validform_checktip"></span>
 					</td>
 				</tr>
+				<tr>
+					<td align="right" width="100px"><label class="Validform_label">是否推荐:</label></td>
+					<td class="value">
+						<select required="required" name="recommend" value="">
+							<option value="Y" <c:if test="${surlPage.recommend == 'Y'}">selected="selected"</c:if>>推荐/Y</option>
+							<option value="N" <c:if test="${surlPage.recommend != 'Y'}">selected="selected"</c:if>>不推荐/N</option>
+						</select>
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
 			</table>
 		</t:formvalid>
  </body>

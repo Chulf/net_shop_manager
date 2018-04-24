@@ -40,6 +40,9 @@ public class SurlEntity implements java.io.Serializable {
 
 	private String name1;
 	private String name2;
+
+	//是否推荐该店铺 如果推荐 Y
+	private String recommend;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -123,6 +126,16 @@ public class SurlEntity implements java.io.Serializable {
 
 	public void setName2(java.lang.String name2){
 		this.name2 = name2;
+	}
+
+	@Column(name ="RECOMMEND",nullable=true,length=255)
+	public java.lang.String getRecommend(){
+		return this.recommend;
+	}
+
+
+	public void setRecommend(java.lang.String recommend){
+		this.recommend = recommend;
 	}
 
 }

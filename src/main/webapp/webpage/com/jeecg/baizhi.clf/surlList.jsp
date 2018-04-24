@@ -11,6 +11,7 @@
             <t:dgCol title="店长名字" field="adminName" width="120"></t:dgCol>
             <t:dgCol title="中文店名" field="name1" width="120"></t:dgCol>
             <t:dgCol title="意大利店名" field="name2" width="120"></t:dgCol>
+            <t:dgCol title="是否推荐" field="recommend" formatterjs="statusFmt" width="60"></t:dgCol>
             <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
             <t:dgDelOpt title="删除" url="surlController.do?del&id={id}" urlclass="ace_button" urlfont="fa-trash-o"/>
             <t:dgToolBar title="录入" icon="icon-add" url="surlController.do?addorupdate" funname="add"></t:dgToolBar>
@@ -19,4 +20,11 @@
                          funname="detail"></t:dgToolBar>
         </t:datagrid>
     </div>
+    <script>
+        function statusFmt(value, row, index){
+            if (value == 'Y')
+                return '<span style="color:red;font-size: 20px;">★</span>';
+            return '<span style="color:black;font-size: 20px;">☆</span>';
+        }
+    </script>
 </div>
