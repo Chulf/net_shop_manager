@@ -20,7 +20,7 @@
                         </label>
                     </td>
                     <td class="value">
-                        <input class="inputxt" id="price1" name="price" datatype="d" value="${sproductPage.price}"/>
+                        <input class="inputxt" id="price1" errormsg="请输入最多两位小数的价格!" name="price" datatype="/^\d+(?:\.\d{1,2})?$/" value="${sproductPage.price}" />
                         <span class="Validform_checktip"></span>
                     </td>
                 </tr>
@@ -78,7 +78,7 @@
                         </label>
                     </td>
                     <td class="value">
-                        <input class="inputxt" id="price" name="price" datatype="d" value="${sproductPage.price}"/>
+                        <input class="inputxt" id="price" errormsg="请输入最多两位小数的价格!" name="price" datatype="/^\d+(?:\.\d{1,2})?$/" value="${sproductPage.price}" />
                         <span class="Validform_checktip"></span>
                     </td>
                 </tr>

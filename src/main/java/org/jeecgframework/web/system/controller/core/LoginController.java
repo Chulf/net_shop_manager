@@ -292,7 +292,7 @@ public class LoginController extends BaseController{
 						attrMap.put("user", u);
 					} else {
 						Map<String, Object> userOrgMap = systemService.findOneForJdbc("select org_id as orgId from t_s_user_org where user_id=?", u.getId());
-						saveLoginSuccessInfo(req, u, (String) userOrgMap.get("orgId"));
+						saveLoginSuccessInfo(req, u, "40289781624134e10162413c87ac0005");
 					}
 				} else {
 					attrMap.put("orgNum", 1);
