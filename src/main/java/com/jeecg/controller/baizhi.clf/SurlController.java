@@ -1,11 +1,13 @@
 package com.jeecg.controller.baizhi.clf;
-import java.util.HashMap;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
 
-import java.util.Map;
-import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.net.URI;
@@ -151,7 +151,17 @@ public class SurlController extends BaseController {
 	public AjaxJson save(SurlEntity surl, HttpServletRequest request) {
 		String message = null;
 
-		String baseUrl = "http://"+request.getServerName()+"/netShoppp/";
+		InputStream in = SurlController.class.getResourceAsStream("/project-name.properties");
+
+		Properties properties = new Properties();
+		String projectName = "";
+		try {
+			properties.load(in);
+			projectName = properties.getProperty("projectName");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String baseUrl = "http://"+request.getServerName()+projectName+"/netShoppp/";
 		AjaxJson j = new AjaxJson();
 		if (StringUtil.isNotEmpty(surl.getId())) {
 			message = "店铺表更新成功";

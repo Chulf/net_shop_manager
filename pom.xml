@@ -1017,13 +1017,7 @@
 		        <artifactId>maven-war-plugin</artifactId>  
 		        <version>2.6</version>
 		        <configuration>
-					 <warSourceExcludes>%regex[^plug-in.+(?:(?&lt;!(?:-|\.)min)\.js)]
-					 ,%regex[^plug-in/accordion.+(?:(?&lt;!(?:-|\.)min)\.css)]
-					 ,%regex[^plug-in/bootstrap.+(?:(?&lt;!(?:-|\.)min)\.css)]
-					 ,%regex[^plug-in/easyui/themes/black.+(?:(?&lt;!(?:-|\.)min)\.css)]
-					 ,%regex[^plug-in/easyui/themes/default.+(?:(?&lt;!(?:-|\.)min)\.css)]
-					 ,%regex[^plug-in/Validform.+(?:(?&lt;!(?:-|\.)min)\.css)]
-					 </warSourceExcludes>  
+
 		        </configuration>
 		     </plugin>
 
