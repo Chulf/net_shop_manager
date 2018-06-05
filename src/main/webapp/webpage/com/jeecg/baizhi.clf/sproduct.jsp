@@ -85,6 +85,32 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
+                            中文单位/Unità cinese:
+                        </label>
+                    </td>
+                    <td class="value">
+                        <input class="inputxt" id="chinaUnit"
+                               name="chinaUnit" datatype="*2-10" required="required"
+                               value="${sproductPage.chinaUnit}"/>
+                        <span class="Validform_checktip"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <label class="Validform_label">
+                            意大利单位/Unità italiana:
+                        </label>
+                    </td>
+                    <td class="value">
+                        <input class="inputxt" id="italyUnit"
+                               name="italyUnit" datatype="*2-10" required="required"
+                               value="${sproductPage.italyUnit}"/>
+                        <span class="Validform_checktip"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <label class="Validform_label">
                             商品主图/La principale figura:
                         </label>
                     </td>

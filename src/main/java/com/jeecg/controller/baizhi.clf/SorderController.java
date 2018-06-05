@@ -401,8 +401,12 @@ public class SorderController extends BaseController {
         }
 
         String time_begin = request.getParameter("time_begin");
+        String time_end = request.getParameter("time_end");
         if(time_begin == null) time_begin = "all";
-        modelMap.put(NormalExcelConstants.FILE_NAME,"订单详情/L'Ordine di dettagli/"+time_begin);
+        if(time_end == null) time_end = "";
+        time_begin = time_begin.replace("-", "");
+        time_end = time_end.replace("-","");
+        modelMap.put(NormalExcelConstants.FILE_NAME,"订单详情/L'Ordine di dettagli/"+time_begin+"_"+time_end);
         modelMap.put(NormalExcelConstants.CLASS,ExcelOrderItem.class);
         modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("订单详情/L'Ordine di dettagli", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
         modelMap.put(NormalExcelConstants.DATA_LIST,data);
@@ -460,9 +464,13 @@ public class SorderController extends BaseController {
         }
 
         String time_begin = request.getParameter("time_begin");
+        String time_end = request.getParameter("time_end");
         if(time_begin == null) time_begin = "all";
+        if(time_end == null) time_end = "";
+        time_begin = time_begin.replace("-", "");
+        time_end = time_end.replace("-","");
         Collection<ExcelOrder> values = stringExcelOrderMap.values();
-        modelMap.put(NormalExcelConstants.FILE_NAME,"采购信息/L'acquisto di dati/"+time_begin);
+        modelMap.put(NormalExcelConstants.FILE_NAME,"采购信息/L'acquisto di dati/"+time_begin+"_"+time_end);
         modelMap.put(NormalExcelConstants.CLASS,ExcelOrder.class);
         modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("采购数据/L'acquisto di dati", "导出人:"+ResourceUtil.getSessionUser().getRealName(),"导出信息"));
         modelMap.put(NormalExcelConstants.DATA_LIST,values);

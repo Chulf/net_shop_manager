@@ -47,7 +47,12 @@ public class SproductEntity implements java.io.Serializable {
 	private java.lang.String flag;
 	/**商品编号*/
 	private String productNum;
-	
+	/**商品单位*/
+	private String chinaUnit;
+	/**商品编号*/
+	private String italyUnit;
+
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  主键
@@ -169,7 +174,7 @@ public class SproductEntity implements java.io.Serializable {
 	 *方法: 取得java.lang.Object
 	 *@return: java.lang.Object  仓库商品标志
 	 */
-	@Column(name ="FLAG",nullable=true,length=16777215)
+	@Column(name ="FLAG",nullable=true,length=255)
 	public java.lang.String getFlag(){
 		return this.flag;
 	}
@@ -182,7 +187,7 @@ public class SproductEntity implements java.io.Serializable {
 		this.flag = flag;
 	}
 
-	@Column(name ="PRODUCTNUM",nullable=true,length=16777215)
+	@Column(name ="PRODUCTNUM",nullable=true,length=255)
 	public java.lang.String getProductNum(){
 		return this.productNum;
 	}
@@ -194,5 +199,33 @@ public class SproductEntity implements java.io.Serializable {
 	public void setProductNum(java.lang.String productNum){
 		this.productNum = productNum;
 	}
+
+	@Column(name ="CHINAUNIT",nullable=true,length=255)
+	public java.lang.String getChinaUnit(){
+		return this.chinaUnit;
+	}
+	/**
+	 *方法: 设置java.lang.Object
+	 *@param: java.lang.Object  商品单位
+	 */
+	public void setChinaUnit(java.lang.String chinaUnit){
+		this.chinaUnit = chinaUnit;
+	}
+
+
+	@Column(name ="ITALYUNIT",nullable=true,length=255)
+	public java.lang.String getItalyUnit(){
+		return this.italyUnit;
+	}
+
+
+	/**
+	 *方法: 设置java.lang.Object
+	 *@param: java.lang.Object  商品单位
+	 */
+	public void setItalyUnit(java.lang.String italyUnit){
+		this.italyUnit = italyUnit;
+	}
+
 
 }

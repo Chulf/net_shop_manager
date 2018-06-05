@@ -10,6 +10,8 @@
             <t:dgCol title="商品描述/Descrizione" field="description" width="120"></t:dgCol>
             <t:dgCol title="商品编号/num" field="productNum" width="120" query="true"></t:dgCol>
             <t:dgCol title="商品价格/Il prezzo" field="price" width="120"></t:dgCol>
+            <t:dgCol title="中文单位/Unità cinese" field="chinaUnit" width="120"></t:dgCol>
+            <t:dgCol title="意大利单位/Unità italiana" field="italyUnit" width="120"></t:dgCol>
             <t:dgCol title="商品主图/La principale figura" field="imgsrc" image="true"  imageSize="120,80" width="120"></t:dgCol>
             <t:dgCol title="类别外键/La Politica Estera" field="categoryId" width="120"></t:dgCol>
             <t:dgCol title="类别名字/La categoria" field="categoryName" width="120"></t:dgCol>
