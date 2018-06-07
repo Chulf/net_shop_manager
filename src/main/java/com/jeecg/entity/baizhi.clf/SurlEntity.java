@@ -43,6 +43,11 @@ public class SurlEntity implements java.io.Serializable {
 
 	//是否推荐该店铺 如果推荐 Y
 	private String recommend;
+
+	//店铺联系人电话
+	private String tel;
+	//店铺联系人微信
+	private String wx;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -138,4 +143,21 @@ public class SurlEntity implements java.io.Serializable {
 		this.recommend = recommend;
 	}
 
+	@Column(name="TEL",nullable=true,length = 255)
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	@Column(name="WX",nullable=true,length = 255)
+	public String getWx() {
+		return wx;
+	}
+
+	public void setWx(String wx) {
+		this.wx = wx;
+	}
 }

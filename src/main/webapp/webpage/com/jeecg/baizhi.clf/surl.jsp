@@ -65,6 +65,28 @@
 					</td>
 				</tr>
 				<tr>
+					<td align="right">
+						<label class="Validform_label">
+							店长电话:
+						</label>
+					</td>
+					<td class="value">
+						<input class="inputxt" id="tel" name="tel" datatype="*" value="${surlPage.tel}" />
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<label class="Validform_label">
+							店长微信:
+						</label>
+					</td>
+					<td class="value">
+						<input class="inputxt" id="wx" name="wx" datatype="*" value="${surlPage.wx}" />
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
+				<tr>
 					<td align="right" width="100px"><label class="Validform_label">是否推荐:</label></td>
 					<td class="value">
 						<select required="required" name="recommend" value="">

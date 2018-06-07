@@ -54,6 +54,17 @@
 						<span class="Validform_checktip"></span>
 					</td>
 				</tr>
+				<tr>
+					<td align="right">
+						<label class="Validform_label">
+							店铺选择:
+						</label>
+					</td>
+					<td class="value">
+						<t:dictSelect field="shopId" datatype="*" dictText="name1" dictField="id" dictTable="s_url" defaultVal="${suserPage.shopId}"></t:dictSelect>
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
 			</table>
 		</t:formvalid>
  </body>
