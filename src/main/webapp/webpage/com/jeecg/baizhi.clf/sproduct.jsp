@@ -16,7 +16,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品价格/Il prezzo:
+                            商品价格/Commodity price:
                         </label>
                     </td>
                     <td class="value">
@@ -27,7 +27,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品描述/Descrizione:
+                            商品描述/Description:
                         </label>
                     </td>
                     <td class="value">
@@ -45,7 +45,7 @@
                     <td align="right">
                         <label class="Validform_label">
 
-                            商品标题/Il titolo:
+                            商品标题/Title:
 
                         </label>
                     </td>
@@ -59,7 +59,7 @@
                     <td align="right">
                         <label class="Validform_label">
 
-                            商品编号/num:
+                            商品编号/Num:
 
                         </label>
                     </td>
@@ -72,7 +72,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品描述/Descrizione:
+                            商品描述/Description:
                         </label>
                     </td>
                     <td class="value">
@@ -85,7 +85,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品价格/Il prezzo:
+                            商品价格/Price:
                         </label>
                     </td>
                     <td class="value">
@@ -96,7 +96,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            中文单位/Unità cinese:
+                            中文单位/China Unit:
                         </label>
                     </td>
                     <td class="value">
@@ -109,7 +109,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            意大利单位/Unità italiana:
+                            英文单位/Eng Unit:
                         </label>
                     </td>
                     <td class="value">
@@ -122,7 +122,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品主图/La principale figura:
+                            商品主图/Img:
                         </label>
                     </td>
                     <td class="value">
@@ -135,7 +135,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            类别/La categoria:
+                            类别/Category:
                         </label>
                     </td>
                     <td class="value"><t:dictSelect field="categoryId" datatype="*" type="select" typeGroupCode="sex"
@@ -149,7 +149,7 @@
                 <tr>
                     <td align="right">
                         <label class="Validform_label">
-                            商品内容/IL contenuto:
+                            商品内容/Content:
                         </label>
                     </td>
                     <td class="value">

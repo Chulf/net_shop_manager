@@ -56,7 +56,7 @@
 				<tr>
 					<td align="right">
 						<label class="Validform_label">
-							意大利店名:
+							英文店名:
 						</label>
 					</td>
 					<td class="value">

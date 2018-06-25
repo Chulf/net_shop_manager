@@ -84,14 +84,14 @@
         <t:datagrid  checkbox="true" name="sproductList2" title="商品列表" actionUrl="sproductController.do?findStoreProduct&flag=Y"
                     fit="true" fitColumns="true" idField="id" queryMode="group"  sortOrder="desc">
             <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
-            <t:dgCol title="商品标题/Il titolo" field="name" width="120"></t:dgCol>
+            <t:dgCol title="商品标题/Title" field="name" width="120"></t:dgCol>
             <t:dgCol title="商品编号/Num" field="productNum" width="120"></t:dgCol>
-            <t:dgCol title="商品描述/Descrizione" field="description" width="120"></t:dgCol>
-            <t:dgCol title="商品价格/Il prezzo" field="price" width="120"></t:dgCol>
-            <t:dgCol title="商品主图/La principale figura" field="imgsrc" image="true" imageSize="100,60" width="120"></t:dgCol>
-            <t:dgCol title="类别外键/La Politica Estera" field="categoryId" width="120"></t:dgCol>
-            <t:dgCol title="类别名字/La categoria" field="categoryName" width="120"></t:dgCol>
-            <t:dgCol title="商品内容/IL contenuto" field="content" width="120" hidden="true"></t:dgCol>
+            <t:dgCol title="商品描述/Description" field="description" width="120"></t:dgCol>
+            <t:dgCol title="商品价格/Price" field="price" width="120"></t:dgCol>
+            <t:dgCol title="商品主图/Img" field="imgsrc" image="true" imageSize="100,60" width="120"></t:dgCol>
+            <t:dgCol title="类别外键/ForignKey" field="categoryId" width="120"></t:dgCol>
+            <t:dgCol title="类别名字/CategoryName" field="categoryName" width="120"></t:dgCol>
+            <t:dgCol title="商品内容/Content" field="content" width="120" hidden="true"></t:dgCol>
         </t:datagrid>
     </div>
 </div>

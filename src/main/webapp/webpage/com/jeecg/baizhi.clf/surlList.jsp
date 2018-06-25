@@ -10,7 +10,7 @@
             <t:dgCol title="店长外键" field="adminId" width="120"></t:dgCol>
             <t:dgCol title="店长名字" field="adminName" width="120"></t:dgCol>
             <t:dgCol title="中文店名" field="name1" width="120"></t:dgCol>
-            <t:dgCol title="意大利店名" field="name2" width="120"></t:dgCol>
+            <t:dgCol title="英文店名" field="name2" width="120"></t:dgCol>
             <t:dgCol title="店长电话" field="tel" width="120"></t:dgCol>
             <t:dgCol title="店长微信" field="wx" width="120"></t:dgCol>
             <t:dgCol title="店长手机" field="whatsapp" width="120"></t:dgCol>
