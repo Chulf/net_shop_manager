@@ -13,6 +13,7 @@
             <t:dgCol title="意大利店名" field="name2" width="120"></t:dgCol>
             <t:dgCol title="店长电话" field="tel" width="120"></t:dgCol>
             <t:dgCol title="店长微信" field="wx" width="120"></t:dgCol>
+            <t:dgCol title="店长手机" field="whatsapp" width="120"></t:dgCol>
             <t:dgCol title="是否推荐" field="recommend" formatterjs="statusFmt" width="60"></t:dgCol>
             <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
             <t:dgDelOpt title="删除" url="surlController.do?del&id={id}" urlclass="ace_button" urlfont="fa-trash-o"/>

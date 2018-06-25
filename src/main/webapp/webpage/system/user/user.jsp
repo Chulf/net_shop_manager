@@ -77,15 +77,15 @@
 			<td class="value" width="85%">
                 <c:if test="${user.id!=null }"> ${user.userName } </c:if>
                 <c:if test="${user.id==null }">
-                    <input id="userName" class="inputxt" name="userName" validType="t_s_base_user,userName,id" value="${user.userName }" datatype="s2-10" />
-                    <span class="Validform_checktip"> <t:mutiLang langKey="username.rang2to10"/></span>
+                    <input id="userName" class="inputxt" name="userName" validType="t_s_base_user,userName,id" value="${user.userName }" datatype="s2-30" />
+                    <span class="Validform_checktip"> <t:mutiLang langKey="username.rang2to30"/></span>
                 </c:if>
             </td>
 		</tr>
 		<tr>
 			<td align="right" width="10%" nowrap><label class="Validform_label"> <t:mutiLang langKey="common.real.name"/>: </label></td>
 			<td class="value" width="10%">
-                <input id="realName" class="inputxt" name="realName" value="${user.realName }" datatype="s2-10"/>
+                <input id="realName" class="inputxt" name="realName" value="${user.realName }" datatype="s2-30"/>
                 <span class="Validform_checktip"><t:mutiLang langKey="fill.realname"/></span>
             </td>
 		</tr>

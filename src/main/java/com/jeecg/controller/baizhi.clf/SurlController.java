@@ -103,10 +103,10 @@ public class SurlController extends BaseController {
 		//为每个实体添加扩展字段
 		List<SurlEntity> surlEntitys = dataGrid.getResults();
 
-		HashMap<String, Map<String, Object>> extMap = new HashMap<>();
+		HashMap<String, Map<String, Object>> extMap = new HashMap<String,Map<String,Object>>();
 
 		for (SurlEntity surlEntity : surlEntitys) {
-			HashMap<String, Object> map = new HashMap<>();
+			HashMap<String, Object> map = new HashMap<String,Object>();
 
 			String adminId = surlEntity.getAdminId();
 

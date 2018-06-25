@@ -24,8 +24,19 @@
                         <span class="Validform_checktip"></span>
                     </td>
                 </tr>
+                <tr>
+                    <td align="right">
+                        <label class="Validform_label">
+                            商品描述/Descrizione:
+                        </label>
+                    </td>
+                    <td class="value">
+                        <input class="inputxt" id="description1" name="description"  datatype="*2-200" value="${sproductPage.description}" />
+                        <span class="Validform_checktip"></span>
+                    </td>
+                </tr>
                 <h1><font
-                        color="red">${sessionScope.LOCAL_CLINET_USER.userName}您只能更改仓库商品的价格为您的自定义价格，仓库商品的其它信息不能更改！/Puoi cambiare i prezzi delle Merci di Magazzino per la vostra usanza dei prezzi delle Merci di Magazzino di altre informazioni, non posso cambiare</font>
+                        color="red">${sessionScope.LOCAL_CLINET_USER.userName}您只能更改仓库商品的价格和描述为您的自定义，仓库商品的其它信息不能更改！/You can only change the price and description of a warehouse item for your customizations. Other information for warehouse items cannot be changed!</font>
                 </h1>
             </c:when>
 
@@ -160,7 +171,11 @@
 <script type="text/javascript">
     function formatterImg() {
         var imgsrc = $("input[name='imgsrc']").val();
+        if(!imgsrc){
+            return;
+        }
         var imgsrc2 = imgsrc.split(",")[0];
+        console.info(imgsrc2);
         if ($("input[name='imgsrc']")[1]){
             $("input[name='imgsrc']").val(imgsrc2);
             $("input[name='imgsrc']")[1].remove();

@@ -343,7 +343,7 @@ public class ScategoryController extends BaseController {
 		//通过管理员Id获得用户关联的所有类别的Id
 		List<SadminCategoryEntity> sadminCategory = sadminCategoryServiceI.findByProperty(SadminCategoryEntity.class, "adminId", tsUser.getId());
 
-		ArrayList<ScategoryEntity> results = new ArrayList<>();
+		ArrayList<ScategoryEntity> results = new ArrayList<ScategoryEntity>();
 
 		for (SadminCategoryEntity sadminCategoryEntity : sadminCategory) {
 

@@ -87,6 +87,17 @@
 					</td>
 				</tr>
 				<tr>
+					<td align="right">
+						<label class="Validform_label">
+							店长手机:
+						</label>
+					</td>
+					<td class="value">
+						<input class="inputxt" id="whatsapp" name="whatsapp" datatype="*" value="${surlPage.whatsapp}" />
+						<span class="Validform_checktip"></span>
+					</td>
+				</tr>
+				<tr>
 					<td align="right" width="100px"><label class="Validform_label">是否推荐:</label></td>
 					<td class="value">
 						<select required="required" name="recommend" value="">

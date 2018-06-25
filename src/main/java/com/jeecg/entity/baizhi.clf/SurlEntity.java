@@ -1,19 +1,13 @@
 package com.jeecg.entity.baizhi.clf;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.SequenceGenerator;
 
 /**   
  * @Title: Entity
@@ -48,6 +42,9 @@ public class SurlEntity implements java.io.Serializable {
 	private String tel;
 	//店铺联系人微信
 	private String wx;
+	//店铺联系人手机
+	private String whatsapp;
+
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -159,5 +156,14 @@ public class SurlEntity implements java.io.Serializable {
 
 	public void setWx(String wx) {
 		this.wx = wx;
+	}
+
+	@Column(name="whatsapp",nullable = true,length = 255)
+	public String getWhatsapp() {
+		return whatsapp;
+	}
+
+	public void setWhatsapp(String whatsapp) {
+		this.whatsapp = whatsapp;
 	}
 }

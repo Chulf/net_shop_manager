@@ -13,6 +13,7 @@ import com.jeecg.service.baizhi.clf.SadminCategoryServiceI;
 import com.jeecg.service.baizhi.clf.SadminProductServiceI;
 import com.jeecg.service.baizhi.clf.ScategoryServiceI;
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
 import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.core.util.RoletoJson;
 import org.jeecgframework.web.system.pojo.base.TSUser;
@@ -171,11 +172,11 @@ public class SproductController extends BaseController {
                     MyBeanUtils.copyBeanNotNull2Bean(sproduct, t);
                     sproductService.saveOrUpdate(t);
                 } else if (t.getFlag() != null && t.getFlag().equals("Y")) {
-                    //否则只能更改仓库商品价格
-                    sadminProductServiceI.updateBySqlString("update s_admin_product set price='" + sproduct.getPrice() + "' where product_id='" + sproduct.getId() + "'");
+                    //否则只能更改仓库商品价格   --- 仓库商品
+                    sadminProductServiceI.updateBySqlString("update s_admin_product set price='" + sproduct.getPrice() + "',description='" + sproduct.getDescription() + "' where product_id='" + sproduct.getId() + "'");
                 } else {
-                    //在否则可以添加商品 并且维护关系价格
-                    sadminProductServiceI.updateBySqlString("update s_admin_product set price='" + sproduct.getPrice() + "' where product_id='" + sproduct.getId() + "'");
+                    //在否则可以更改商品并且维护关系价格   --- 非仓库商品
+                    sadminProductServiceI.updateBySqlString("update s_admin_product set price='" + sproduct.getPrice() + "',description='" + sproduct.getDescription() + "' where product_id='" + sproduct.getId() + "'");
                     MyBeanUtils.copyBeanNotNull2Bean(sproduct, t);
                     sproductService.saveOrUpdate(t);
                 }
@@ -196,6 +197,7 @@ public class SproductController extends BaseController {
                 //如果是普通管理员 添加关系
                 SadminProductEntity productEntity = new SadminProductEntity();
                 productEntity.setPrice(sproduct.getPrice());
+                productEntity.setDescription(sproduct.getDescription());
                 productEntity.setAdminId(tsUser.getId());
                 productEntity.setProductId(productId.toString());
 
@@ -299,40 +301,40 @@ public class SproductController extends BaseController {
      * @param dataGrid 查看管理员店铺商品
      */
     @RequestMapping(params = "findProductByAdmin")
-    public void findProductByAdmin(HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid,SproductEntity sproduct1) {
+    public void findProductByAdmin(HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid, SproductEntity sproduct1) {
         //判断当前登录的管理员 是普通管理员 还是超级管理员
         TSUser tsUser = ResourceUtil.getSessionUser();
         //商品数据列表
         List<SproductEntity> results = new ArrayList<SproductEntity>();
 
-        HashMap<String, Map<String, Object>> extMap = new HashMap<>();
+        HashMap<String, Map<String, Object>> extMap = new HashMap<String, Map<String, Object>>();
 
         if (tsUser.getUserName().equals("SuperAdmin")) {
             //如果是仓库管理员 查询所有仓库商品
             CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
             //查询条件组装器
-            cq.eq("flag","Y");
+            cq.eq("flag", "Y");
             org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct1, request.getParameterMap());
             this.sproductService.getDataGridReturn(cq, true);
-            List<SproductEntity> sproducts =  dataGrid.getResults();
+            List<SproductEntity> sproducts = dataGrid.getResults();
 
             //List<SproductEntity> sproducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
             for (SproductEntity sproduct : sproducts) {
 
-                HashMap<String, Object> map = new HashMap<>();
+                HashMap<String, Object> map = new HashMap<String, Object>();
 
                 ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, sproduct.getCategoryId());
 
                 //扩展类别字段
                 map.put("categoryName", scategoryEntity.getName());
-                if(sproduct.getFlag() != null && sproduct.getFlag().equals("Y")){
+                if (sproduct.getFlag() != null && sproduct.getFlag().equals("Y")) {
 
                     //代表来源为仓库商品
-                    map.put("source","仓库商品");
+                    map.put("source", "仓库商品");
 
-                }else{
+                } else {
                     //代表来源为用户添加
-                    map.put("source","店家自己添加");
+                    map.put("source", "店家自己添加");
 
                 }
                 extMap.put(sproduct.getId(), map);
@@ -346,13 +348,13 @@ public class SproductController extends BaseController {
             for (SadminProductEntity adminProduct : adminProducts) {
 
 
-               // SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
+                // SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
                 CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
                 //查询条件组装器
-                cq.eq("id",adminProduct.getProductId());
+                cq.eq("id", adminProduct.getProductId());
                 org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct1, request.getParameterMap());
                 this.sproductService.getDataGridReturn(cq, true);
-                List<SproductEntity> sproducts =  dataGrid.getResults();
+                List<SproductEntity> sproducts = dataGrid.getResults();
 
 
                 systemService.getSession().clear();
@@ -360,18 +362,20 @@ public class SproductController extends BaseController {
                 //覆盖原有的商品价格
                 SproductEntity product = sproducts.get(0);
                 product.setPrice(adminProduct.getPrice());
-                HashMap<String, Object> map = new HashMap<>();
+                //覆盖原有商品描述
+                product.setDescription(adminProduct.getDescription());
+                HashMap<String, Object> map = new HashMap<String, Object>();
                 ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, product.getCategoryId());
                 //扩展类别字段
                 map.put("categoryName", scategoryEntity.getName());
-                if(product.getFlag() != null && product.getFlag().equals("Y")){
+                if (product.getFlag() != null && product.getFlag().equals("Y")) {
 
                     //代表来源为仓库商品
-                    map.put("source","仓库商品");
+                    map.put("source", "仓库商品");
 
-                }else{
+                } else {
                     //代表来源为用户添加
-                    map.put("source","店家自己添加");
+                    map.put("source", "店家自己添加");
 
                 }
 
@@ -391,46 +395,51 @@ public class SproductController extends BaseController {
      * @param dataGrid 查看仓库未被选择商品
      */
     @RequestMapping(params = "findStoreProduct")
-    public void findStoreProduct(SproductEntity sproduct,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+    public void findStoreProduct(SproductEntity sproduct, HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
 
         TSUser tsUser = ResourceUtil.getSessionUser();
-
         CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
         //查询条件组装器
         org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct, request.getParameterMap());
-        cq.eq("flag","Y");
-        this.sproductService.getDataGridReturn(cq, true);
-        //获取所有仓库商品
-        List<SproductEntity> storeProducts = (List<SproductEntity>)dataGrid.getResults();
-
-        //List<SproductEntity> storeProducts = sproductService.findByProperty(SproductEntity.class, "flag", "Y");
-
+        cq.eq("flag", "Y");
         //获取用户已选择的商品
         List<SadminProductEntity> productEntityList = sadminProductServiceI.findByProperty(SadminProductEntity.class, "adminId", tsUser.getId());
-
         //把所有已选择商品的id添加到set
         Set<String> set = new HashSet<String>();
         for (SadminProductEntity productEntity : productEntityList) {
             set.add(productEntity.getProductId());
         }
-
-        ArrayList<SproductEntity> results = new ArrayList<>();
-        //把没有添加过的商品添加的results中
-        Map<String, Map<String,Object>> extMap = new HashMap<String,Map<String,Object>>();
-        for (SproductEntity storeProduct : storeProducts) {
-
-            if (!set.contains(storeProduct.getId())) {
-                HashMap<String, Object> map = new HashMap<>();
-                ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, storeProduct.getCategoryId());
-                //扩展类别字段
-                map.put("categoryName", scategoryEntity.getName());
-                extMap.put(storeProduct.getId(), map);
-                results.add(storeProduct);
-            }
+        //把对象数组转换为string 数组
+        Object[] objects = set.toArray();
+        String[] aa = new String[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            aa[i] = objects[i].toString();
         }
+        String str4SQLINParam = getStr4SQLINParam(aa);
+        cq.add(Restrictions.sqlRestriction("id not in (" + str4SQLINParam + ")"));
+        this.sproductService.getDataGridReturn(cq, true);
+        //获取所有仓库商品
+        List<SproductEntity> storeProducts = (List<SproductEntity>) dataGrid.getResults();
 
-        dataGrid.setResults(results);
-        TagUtil.datagrid(response, dataGrid,extMap);
+        Map<String, Map<String, Object>> extMap = new HashMap<String, Map<String, Object>>();
+        for (SproductEntity storeProduct : storeProducts) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, storeProduct.getCategoryId());
+            //扩展类别字段
+            map.put("categoryName", scategoryEntity.getName());
+            extMap.put(storeProduct.getId(), map);
+        }
+        TagUtil.datagrid(response, dataGrid, extMap);
+    }
+
+    //数组转换sql 方法
+    public String getStr4SQLINParam(String[] values) {
+        String str = "";
+        for (int i = 0; i < values.length; i++) {
+            str += (i != 0) ? ", " : "";
+            str += "'" + values[i] + "'";
+        }
+        return str;
     }
 
     @RequestMapping(params = "addStoreProduct")
@@ -448,13 +457,15 @@ public class SproductController extends BaseController {
             SproductEntity product = sproductService.getEntity(SproductEntity.class, id);
             //设置价格默认为仓库价格
             productEntity.setPrice(product.getPrice());
+            //设置描述为仓库描述
+            productEntity.setDescription(product.getDescription());
 
             sadminProductServiceI.save(productEntity);
 
             //添加完商品之后  判断当前店铺是否有当前商品类别 没有则添加
             List<Object> listbySql = sadminCategoryServiceI.findListbySql("select * from s_admin_category where category_id='" + product.getCategoryId() + "'and admin_id='" + tsUser.getId() + "'");
 
-            if(listbySql.size()==0){
+            if (listbySql.size() == 0) {
                 //添加类别到该管理员
                 SadminCategoryEntity category = new SadminCategoryEntity();
                 category.setAdminId(tsUser.getId());

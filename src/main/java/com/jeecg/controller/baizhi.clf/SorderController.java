@@ -129,7 +129,7 @@ public class SorderController extends BaseController {
 
         List<SorderEntity> results2 = new ArrayList<SorderEntity>();
         //扩展字段集合
-        HashMap<String, Map<String, Object>> extMap = new HashMap<>();
+        HashMap<String, Map<String, Object>> extMap = new HashMap<String,Map<String,Object>>();
         for (SorderEntity od : results) {
 
 
@@ -367,7 +367,7 @@ public class SorderController extends BaseController {
         List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
 
         //封装要导出的数据
-        ArrayList<ExcelOrderItem> data = new ArrayList<>();
+        ArrayList<ExcelOrderItem> data = new ArrayList<ExcelOrderItem>();
 
         //一个订单对应多个商品
         for (SorderEntity od : results) {
@@ -382,7 +382,7 @@ public class SorderController extends BaseController {
             excelOrderItem.setUsername(od.getUserId());
 
             //疯传订单详情
-            ArrayList<ProductItem> productItems = new ArrayList<>();
+            ArrayList<ProductItem> productItems = new ArrayList<ProductItem>();
 
             //获取该订单的所有订单项
             List<SorderItemEntity> orderItems = sorderItemService.findByProperty(SorderItemEntity.class, "orderId", od.getOrderNum());
@@ -429,7 +429,7 @@ public class SorderController extends BaseController {
         List<SorderEntity> results = (List<SorderEntity>) dataGrid.getResults();
 
         //组装采购数据
-        Map<String, ExcelOrder> stringExcelOrderMap = new HashMap<>();
+        Map<String, ExcelOrder> stringExcelOrderMap = new HashMap<String,ExcelOrder>();
 
         //一个订单对应多个商品
         for (SorderEntity od : results) {
