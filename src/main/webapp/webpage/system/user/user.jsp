@@ -123,7 +123,7 @@
 		<tr>
 			<td align="right" nowrap><label class="Validform_label">  <t:mutiLang langKey="common.phone"/>: </label></td>
 			<td class="value">
-                <input class="inputxt" name="mobilePhone" value="${user.mobilePhone}" datatype="m" errormsg="手机号码不正确" ignore="ignore"/>
+                <input class="inputxt" name="mobilePhone" value="${user.mobilePhone}" datatype="n" errormsg="手机号码不正确" ignore="ignore"/>
                 <span class="Validform_checktip"></span>
             </td>
 		</tr>

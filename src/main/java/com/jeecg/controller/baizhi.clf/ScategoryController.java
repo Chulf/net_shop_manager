@@ -153,7 +153,7 @@ public class ScategoryController extends BaseController {
 		for (SadminProductEntity sadminProductEntity : sadminProductEntitys) {
 
 			 SproductEntity ent1= sproductServiceI.getEntity(SproductEntity.class, sadminProductEntity.getProductId());
-			if(ent1.getCategoryId().equals(scategory.getId())){
+			if(ent1 != null && ent1.getCategoryId().equals(scategory.getId())){
 				//如果进入该条件 证明该类别下还有商品存在
 				message = "请先删除该类别下所有商品";
 				systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
@@ -191,16 +191,6 @@ public class ScategoryController extends BaseController {
 				MyBeanUtils.copyBeanNotNull2Bean(scategory, t);
 				Serializable id = scategoryService.save(t);
 				//scategoryService.saveOrUpdate(t);
-
-				SadminCategoryEntity sadminCategoryEntity = new SadminCategoryEntity();
-
-				sadminCategoryEntity.setCategoryId(id.toString());
-
-				String adminId = ResourceUtil.getSessionUser().getId();
-				sadminCategoryEntity.setAdminId(adminId);
-
-				sadminCategoryServiceI.save(sadminCategoryEntity);
-
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -211,11 +201,8 @@ public class ScategoryController extends BaseController {
 			Serializable id = scategoryService.save(scategory);
 
 			//scategoryService.saveOrUpdate(t);
-
 			SadminCategoryEntity sadminCategoryEntity = new SadminCategoryEntity();
-
 			sadminCategoryEntity.setCategoryId(id.toString());
-
 			String adminId = ResourceUtil.getSessionUser().getId();
 			sadminCategoryEntity.setAdminId(adminId);
 			sadminCategoryServiceI.save(sadminCategoryEntity);

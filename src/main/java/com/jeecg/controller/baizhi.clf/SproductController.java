@@ -344,47 +344,47 @@ public class SproductController extends BaseController {
             //获取当前登录的管理员 绑定的所有商品
             List<SadminProductEntity> adminProducts = sadminProductServiceI.findByProperty(SadminProductEntity.class, "adminId", tsUser.getId());
 
-            //通过商品的id获得所有商品的信息
-            for (SadminProductEntity adminProduct : adminProducts) {
+            String[] ids = new String[adminProducts.size()];
+            //获得该管理员的商品id列表
+            for (int i = 0; i < adminProducts.size(); i++) {
+                SadminProductEntity sadminProductEntity = adminProducts.get(i);
+                ids[i] = sadminProductEntity.getProductId();
+            }
 
-
-                // SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
-                CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
-                //查询条件组装器
-                cq.eq("id", adminProduct.getProductId());
-                org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct1, request.getParameterMap());
-                this.sproductService.getDataGridReturn(cq, true);
-                List<SproductEntity> sproducts = dataGrid.getResults();
-
-
-                systemService.getSession().clear();
-                if (sproducts.size() == 0) continue;
+            // SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
+            CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
+            //查询条件组装器 获的所有关联商品
+            cq.in("id", ids);
+            org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, sproduct1, request.getParameterMap());
+            this.sproductService.getDataGridReturn(cq, true);
+            List<SproductEntity> sproducts = dataGrid.getResults();
+            for (SproductEntity product : sproducts) {
+                //获的商品对应的关系对象
+                SadminProductEntity sadminProductEntity = null;
+                for (SadminProductEntity adminProduct : adminProducts) {
+                    if (adminProduct.getProductId().equals(product.getId())) {
+                        sadminProductEntity = adminProduct;
+                    }
+                }
                 //覆盖原有的商品价格
-                SproductEntity product = sproducts.get(0);
-                product.setPrice(adminProduct.getPrice());
+                product.setPrice(sadminProductEntity.getPrice());
                 //覆盖原有商品描述
-                product.setDescription(adminProduct.getDescription());
+                product.setDescription(sadminProductEntity.getDescription());
                 HashMap<String, Object> map = new HashMap<String, Object>();
                 ScategoryEntity scategoryEntity = scategoryService.getEntity(ScategoryEntity.class, product.getCategoryId());
                 //扩展类别字段
                 map.put("categoryName", scategoryEntity.getName());
                 if (product.getFlag() != null && product.getFlag().equals("Y")) {
-
                     //代表来源为仓库商品
                     map.put("source", "仓库商品");
-
                 } else {
                     //代表来源为用户添加
                     map.put("source", "店家自己添加");
-
                 }
-
                 extMap.put(product.getId(), map);
-
                 results.add(product);
             }
         }
-
         dataGrid.setResults(results);
         TagUtil.datagrid(response, dataGrid, extMap);
     }
