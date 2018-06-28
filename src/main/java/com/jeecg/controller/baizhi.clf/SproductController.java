@@ -352,6 +352,14 @@ public class SproductController extends BaseController {
             }
 
             // SproductEntity product = sproductService.getEntity(SproductEntity.class, adminProduct.getProductId());
+
+            if(ids.length == 0) {
+                //如果关联商品为0 则没有商品直接结束程序
+                dataGrid.setTotal(0);
+                dataGrid.setResults(null);
+                TagUtil.datagrid(response, dataGrid, extMap);
+                return;
+            }
             CriteriaQuery cq = new CriteriaQuery(SproductEntity.class, dataGrid);
             //查询条件组装器 获的所有关联商品
             cq.in("id", ids);
@@ -416,7 +424,10 @@ public class SproductController extends BaseController {
             aa[i] = objects[i].toString();
         }
         String str4SQLINParam = getStr4SQLINParam(aa);
-        cq.add(Restrictions.sqlRestriction("id not in (" + str4SQLINParam + ")"));
+        if(aa.length != 0 ) {
+            //不等于0 有添加过仓库商品 排除这些商品
+            cq.add(Restrictions.sqlRestriction("id not in (" + str4SQLINParam + ")"));
+        }
         this.sproductService.getDataGridReturn(cq, true);
         //获取所有仓库商品
         List<SproductEntity> storeProducts = (List<SproductEntity>) dataGrid.getResults();
@@ -472,8 +483,6 @@ public class SproductController extends BaseController {
                 category.setCategoryId(product.getCategoryId());
                 sadminCategoryServiceI.save(category);
             }
-
-
         }
 
     }
